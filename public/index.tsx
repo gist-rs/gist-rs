@@ -4,7 +4,7 @@ export function App() {
   return (
     <LocationProvider>
       <div class="app">
-        <img class="logo" src="./img/gist-logo-dark.svg" />
+        <img src="./img/gist-logo-dark.svg" width="264" height="103" alt="gist.rs" />
         <br />
         <br />
         <section class="hero">
@@ -24,7 +24,7 @@ export function App() {
         <hr />
         <section class="footer">
           <a href="https://github.com/gist-rs">
-            <img src="./img/github-logo.svg" width="16" height="16" />
+            <img src="./img/github-logo.svg" width="16" height="16" alt="github" />
           </a>
         </section>
       </div>
