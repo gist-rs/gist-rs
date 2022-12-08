@@ -3,7 +3,10 @@
 	"scripts": {
 		"start": "wmr",
 		"build": "wmr build --prerender",
-		"serve": "wmr serve"
+		"serve": "wmr serve",
+		"dev-build": "npx nodemon --ignore dist/ --exec yarn build",
+		"kill": "kill $(lsof -i tcp:8788) &> /dev/null || true",
+		"dev-pages": "yarn kill && npx wrangler pages dev dist"
 	},
 	"eslintConfig": {
 		"extends": "preact"
