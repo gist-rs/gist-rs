@@ -4,7 +4,7 @@
 		"start": "wmr",
 		"build": "wmr build --prerender",
 		"serve": "wmr serve",
-		"dev-build": "npx nodemon --ignore dist/ --exec yarn build",
+		"dev-build": "nodemon --ignore dist --exec yarn build",
 		"kill": "kill $(lsof -i tcp:8788) &> /dev/null || true",
 		"dev-pages": "yarn kill && npx wrangler pages dev dist"
 	},
@@ -16,6 +16,9 @@
 		"preact-iso": "^2.3.1"
 	},
 	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20221111.1",
+		"nodemon": "^2.0.20",
+		"typescript": "^4.9.4",
 		"wmr": "^3.8.0"
 	}
 }

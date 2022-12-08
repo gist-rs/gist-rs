@@ -1,8 +1,30 @@
 import { LocationProvider, hydrate, prerender as ssr } from 'preact-iso'
+import { useEffect, useState } from 'preact/hooks'
+import { render } from 'preact'
+
+export function Bar() {
+  const cached_data_string = sessionStorage.getItem('3mPuPCgmdexxcSYtpKDTPktTnEYHJcsZxCJdfemN1xgt')
+  const cached_data = JSON.parse(cached_data_string)
+  console.log(cached_data)
+  const [data] = useState(cached_data)
+
+  return (
+    <div>
+      <button>{data.pubkey}</button>
+    </div>
+  )
+}
 
 export function App() {
+  useEffect(() => {
+    // TODO: https://gist.github.com/developit/f4c67a2ede71dc2fab7f357f39cff28c
+    let bar = document.getElementById('bar')
+    render(<Bar />, bar, bar)
+  })
+
   return (
     <LocationProvider>
+      <div id="bar" />
       <div class="app">
         <img src="./img/gist-logo-dark.svg" width="264" height="103" alt="gist.rs" />
         <br />
