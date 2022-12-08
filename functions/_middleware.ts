@@ -14,9 +14,9 @@ const authentication = async (context: any) => {
   switch (pathname) {
     case "/":
       const original_body = await response.text();
-      const key = '3mPuPCgmdexxcSYtpKDTPktTnEYHJcsZxCJdfemN1xgt';
-      const data = JSON.stringify({ pubkey: key });
-      const body = `<script>sessionStorage.setItem('${key}', '${data}')</script>` + original_body
+      const pubkey = '3mPuPCgmdexxcSYtpKDTPktTnEYHJcsZxCJdfemN1xgt';
+      const data = JSON.stringify({ pubkey });
+      const body = `<script>window.__STATE__=${data}</script>` + original_body
       const new_response = new Response(body, response);
       return new_response
 

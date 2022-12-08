@@ -3,8 +3,8 @@ import { useEffect, useState } from 'preact/hooks'
 import { render } from 'preact'
 
 export function Bar() {
-  const cached_data_string = sessionStorage.getItem('3mPuPCgmdexxcSYtpKDTPktTnEYHJcsZxCJdfemN1xgt')
-  const cached_data = JSON.parse(cached_data_string)
+  // @ts-ignore
+  const cached_data = window.__STATE__ ? window.__STATE__ : {}
   console.log(cached_data)
   const [data] = useState(cached_data)
 
