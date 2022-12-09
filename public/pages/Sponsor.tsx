@@ -10,7 +10,7 @@ export default function Sponsor() {
   const [public_key, set_public_key] = useState<string>()
   const [lamports, set_lamports] = useState(0)
 
-  const default_solana_pay_link = get_solana_pay_link(GIST_PUBKEY, 1)
+  const default_solana_pay_link = get_solana_pay_link(GIST_PUBKEY)
   const [solana_pay_link] = useState<string>(default_solana_pay_link)
 
   useEffect(() => {
@@ -44,6 +44,8 @@ export default function Sponsor() {
       <a href={solana_pay_link} title="Solana Pay" aria-label="Solana Pay">
         Solana Pay {solana_pay_link}
       </a>
+      <hr />
+      <a href="https://phantom.app/ul/v1/connect?app_url=https://gist.rs&dapp_encryption_public_key=gistmeAhMG7AcKSPCHis8JikGmKT9tRRyZpyMLNNULq&redirect_link=https://gist.rs/phantom&">connect</a>
       <hr />
       <img src={get_qr(PATREON_URL)} alt={PATREON_URL} />
       <hr />

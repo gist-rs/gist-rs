@@ -119,15 +119,14 @@ export type SolanaPayOptions = {
   message: string
 }
 
-export const get_solana_pay_link = (recipient: string, amount: number, options?: SolanaPayOptions) => {
+export const get_solana_pay_link = (recipient: string, amount?: number, options?: SolanaPayOptions) => {
   const { spl_token, reference, label, message } = options || {}
   const params = Object.entries({ spl_token, reference, label, message }).filter((e) => e[1])
   const params_object = Object.fromEntries(params)
-  const searchParams = new URLSearchParams({
-    amount: amount.toString(),
-    ...params_object
-  })
-
+  if (!isNaN(amount)) {
+    params_object.amount = amount.toString()
+  }
+  const searchParams = new URLSearchParams(params_object)
   const url = new URL(`solana:${recipient}?${searchParams}`)
   return url.toString()
 }
