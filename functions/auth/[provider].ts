@@ -7,7 +7,7 @@ export enum ProviderName {
   Phantom = "phantom"
 }
 
-const decryptPayload = (data: string, nonce: string, sharedSecret?: Uint8Array) => {
+const decryptPayload = (data: string, nonce: string, sharedSecret: Uint8Array) => {
   if (!sharedSecret) throw new Error("missing shared secret");
 
   const decryptedData = nacl.box.open.after(bs58.decode(data), bs58.decode(nonce), sharedSecret);
