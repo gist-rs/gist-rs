@@ -123,8 +123,6 @@ export const get_solana_pay_link = (recipient: string, amount: number, options?:
   const { spl_token, reference, label, message } = options || {}
   const params = Object.entries({ spl_token, reference, label, message }).filter((e) => e[1])
   const params_object = Object.fromEntries(params)
-  console.log('params:', params)
-  console.log('params_object:', params_object)
   const searchParams = new URLSearchParams({
     amount: amount.toString(),
     ...params_object
