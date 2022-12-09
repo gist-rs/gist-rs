@@ -25,7 +25,7 @@ export function App() {
   useEffect(() => {
     // TODO: https://gist.github.com/developit/f4c67a2ede71dc2fab7f357f39cff28c
     let bar = document.getElementById('bar')
-    render(<Bar />, bar, bar)
+    bar && render(<Bar />, bar, bar)
   }, [])
 
   return (
