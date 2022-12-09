@@ -1,7 +1,6 @@
 
 import * as bs58 from "bs58";
-// @ts-ignore
-import nacl from "tweetnacl";
+import * as nacl from "tweetnacl";
 
 export enum ProviderName {
   Phantom = "phantom"

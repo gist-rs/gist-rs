@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "moduleResolution": "node",
     "target": "esnext",
     "module": "esnext",
     "lib": [
@@ -13,6 +14,8 @@
   },
   "include": [
     "node_modules/wmr/types.d.ts",
+    "node_modules/tweetnacl/nacl.d.ts",
+    "node_modules/is-mobile/index.d.ts",
     "**/*"
   ]
 }
