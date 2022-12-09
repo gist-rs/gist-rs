@@ -45,7 +45,7 @@ export default function Sponsor() {
         Solana Pay {solana_pay_link}
       </a>
       <hr />
-      <a href="https://phantom.app/ul/v1/connect?app_url=https://gist.rs&dapp_encryption_public_key=gistmeAhMG7AcKSPCHis8JikGmKT9tRRyZpyMLNNULq&redirect_link=https://gist.rs/phantom&">connect</a>
+      <a href="https://phantom.app/ul/v1/connect?app_url=https://gist.rs&dapp_encryption_public_key=Bigf1Q8vseNX5TAGZpKkuoC51HMMmhZZCWrVBwy7R8kP&redirect_link=https://gist.rs/auth/phantom&">connect</a>
       <hr />
       <img src={get_qr(PATREON_URL)} alt={PATREON_URL} />
       <hr />

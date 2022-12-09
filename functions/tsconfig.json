@@ -6,7 +6,13 @@
       "esnext"
     ],
     "types": [
-      "@cloudflare/workers-types"
+      "@cloudflare/workers-types",
+      "@types/bs58",
+      "tweetnacl"
     ]
-  }
+  },
+  "include": [
+    "node_modules/wmr/types.d.ts",
+    "**/*"
+  ]
 }

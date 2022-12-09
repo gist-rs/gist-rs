@@ -6,18 +6,21 @@
 		"serve": "wmr serve",
 		"dev-build": "nodemon --ignore dist --exec yarn build",
 		"kill": "kill $(lsof -i tcp:8788) &> /dev/null || true",
-		"dev-pages": "yarn kill && npx wrangler pages dev dist"
+		"dev-pages": "yarn kill && npx wrangler pages dev dist --local --compatibility-date=2022-12-09"
 	},
 	"eslintConfig": {
 		"extends": "preact"
 	},
 	"dependencies": {
+		"bs58": "^5.0.0",
 		"preact": "^10.11.3",
 		"preact-iso": "^2.3.1",
-		"preact-router": "^4.1.0"
+		"preact-router": "^4.1.0",
+		"tweetnacl": "^1.0.3"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20221111.1",
+		"@types/bs58": "^4.0.1",
 		"nodemon": "^2.0.20",
 		"typescript": "^4.9.4",
 		"wmr": "^3.8.0"
