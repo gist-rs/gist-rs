@@ -2,6 +2,7 @@ import { ErrorBoundary, Router, LocationProvider, hydrate, prerender as ssr, laz
 import { useEffect, useState } from 'preact/hooks'
 import { render } from 'preact'
 import { Home } from './pages/Home'
+import _404 from './pages/_404'
 
 export function Bar() {
   console.log('bar')

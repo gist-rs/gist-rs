@@ -2,7 +2,7 @@
 	"private": true,
 	"scripts": {
 		"start": "wmr",
-		"build": "npx wmr build --prerender",
+		"build": "wmr build --prerender",
 		"serve": "wmr serve",
 		"dev-build": "nodemon --ignore dist --exec yarn build",
 		"kill": "kill $(lsof -i tcp:8788) &> /dev/null || true",
