@@ -36,6 +36,8 @@ const handle_phantom_deeplink = async (context) => {
   const { searchParams, hostname } = new URL(request.url)
 
   const PHANTOM_ENCRYPTION_SECRET_KEY = await context.env.PHANTOM_ENCRYPTION_SECRET_KEY
+  if (!PHANTOM_ENCRYPTION_SECRET_KEY) return new Response('Wat!?')
+
   const secret_key = new Uint8Array(bs58.decode(PHANTOM_ENCRYPTION_SECRET_KEY));
   const sharedSecretDapp = nacl.box.before(
     bs58.decode(searchParams.get("phantom_encryption_public_key")!),
