@@ -2,6 +2,7 @@
 	"private": true,
 	"dependencies": {
 		"bs58": "^5.0.0",
+		"is-mobile": "^3.1.1",
 		"tweetnacl": "^1.0.3"
 	},
 	"devDependencies": {

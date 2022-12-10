@@ -13,6 +13,7 @@
 	},
 	"dependencies": {
 		"bs58": "^5.0.0",
+		"is-mobile": "^3.1.1",
 		"preact": "^10.11.3",
 		"preact-iso": "^2.3.1",
 		"preact-router": "^4.1.0",
