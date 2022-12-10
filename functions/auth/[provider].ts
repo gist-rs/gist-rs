@@ -4,6 +4,8 @@ import * as nacl from "tweetnacl";
 import * as cookie from "cookie";
 
 const COOKIES_DOMAIN = '.gist.rs'
+const DOMAIN_WHITED_LIST = ['localhost', 'develop.gist-rs.pages.dev', 'gist-rs.pages.dev']
+
 export enum ProviderName {
   Phantom = "phantom"
 }
@@ -52,7 +54,7 @@ const handle_phantom_deeplink = async (context) => {
 
   const response = new Response(`Welcome:${JSON.stringify(connectData, null, 2)}`)
   const web3_token = `${connectData.public_key},${connectData.session}`
-  const cookies_domain = ['localhost'].includes(hostname) ? '' : COOKIES_DOMAIN
+  const cookies_domain = DOMAIN_WHITED_LIST.includes(hostname) ? '' : COOKIES_DOMAIN
   const cookie_web3_token = get_cookie_web3_token(web3_token, cookies_domain)
   response.headers.set('Set-Cookie', cookie_web3_token)
 
