@@ -2,7 +2,6 @@ import { ErrorBoundary, Router, LocationProvider, hydrate, prerender as ssr, laz
 import { useEffect, useState } from 'preact/hooks'
 import { render } from 'preact'
 import { Home } from './pages/Home'
-import _404 from './pages/_404'
 
 export function Bar() {
   console.log('bar')
@@ -21,6 +20,7 @@ export function Bar() {
 }
 
 const Sponsor = lazy(() => import('./pages/Sponsor.js'))
+const Auth = lazy(() => import('./pages/Auth.js'))
 
 export function App() {
   useEffect(() => {
@@ -34,6 +34,7 @@ export function App() {
       <ErrorBoundary>
         <Router>
           <Home path="/" />
+          <Auth path="/auth/:provider" />
           <Sponsor path="/sponsor" />
         </Router>
       </ErrorBoundary>

@@ -3,6 +3,7 @@ export function Home() {
     <div>
       <div id="bar" />
       <a href="/sponsor">❤ Sponsor</a>
+      <a href="/deeplink">deeplink</a>
       <div class="app">
         <img src="./img/gist-logo-dark.svg" width="264" height="103" alt="gist.rs" />
         <br />

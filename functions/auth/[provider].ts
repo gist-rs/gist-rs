@@ -2,6 +2,7 @@
 import * as bs58 from "bs58";
 import * as nacl from "tweetnacl";
 import * as cookie from "cookie";
+import html from '../../dist/deeplink/index.html'
 
 const DOMAIN_WHITELIST = ['localhost', 'develop.gist-rs.pages.dev', 'gist-rs.pages.dev']
 const COOKIES_DOMAIN = '.gist.rs'
@@ -65,7 +66,7 @@ const handle_phantom_deeplink = async (context) => {
   // 3. Set __SESSION__
   const session_data = get_session_data(session);
   const body = `<script>window.__SESSION__=${JSON.stringify({ public_key, ...session_data })}</script>`
-  const response = new Response(body, {
+  const response = new Response(body + html, {
     headers: { "content-type": "text/html" },
   });
 
