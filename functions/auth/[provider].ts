@@ -3,7 +3,7 @@ import * as bs58 from "bs58";
 import * as nacl from "tweetnacl";
 import * as cookie from "cookie";
 
-const DOMAIN_WHITED_LIST = ['localhost', 'develop.gist-rs.pages.dev', 'gist-rs.pages.dev']
+const DOMAIN_WHITELIST = ['localhost', 'develop.gist-rs.pages.dev', 'gist-rs.pages.dev']
 const COOKIES_DOMAIN = '.gist.rs'
 const COOKIES_PHANTOM_KEY_NAME = 'phantom::session'
 
@@ -71,7 +71,7 @@ const handle_phantom_deeplink = async (context) => {
 
   // 4. Set public_key, session to cookie.
   const web3_token = `mobile::${public_key}::${session}`;
-  const cookies_domain = DOMAIN_WHITED_LIST.includes(hostname) ? '' : COOKIES_DOMAIN;
+  const cookies_domain = DOMAIN_WHITELIST.includes(hostname) ? '' : COOKIES_DOMAIN;
   const serialized_cookie = get_serialized_cookie(COOKIES_PHANTOM_KEY_NAME, web3_token, cookies_domain);
   response.headers.set('Set-Cookie', serialized_cookie);
 
