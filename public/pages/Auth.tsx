@@ -29,15 +29,21 @@
 // }
 
 import { render } from 'preact'
+import { useEffect, useState } from 'preact/hooks'
+import { get_user_data } from '../lib/cf'
 
-const App = () => {
+const Auth = () => {
+  const [pubkey] = useState(get_user_data().server_session.pubkey)
   return (
     <div>
+      <pre>
+        <code>{pubkey}</code>
+      </pre>
       <p>Do you agree to the statement: "Preact is awesome"?</p>
     </div>
   )
 }
 
-render(<App />, document.body)
+render(<Auth />, document.body)
 
-export default App
+export default Auth

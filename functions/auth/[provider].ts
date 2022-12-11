@@ -14,13 +14,12 @@ export enum ProviderName {
 
 // https://docs.phantom.app/solana/integrating-phantom/deeplinks-ios-and-android/handling-sessions#session-structure
 const get_session_data = (session: string) => {
-  const signature = session.slice(0, 64);
   const encoded_payload = bs58.decode(session).slice(64);
   const payload_string = new TextDecoder().decode(encoded_payload);
   const payload = JSON.parse(payload_string);
 
   return {
-    signature,
+    session,
     payload
   }
 }
@@ -59,19 +58,19 @@ const handle_phantom_deeplink = async (context) => {
   const decrypted_data = nacl.box.open.after(bs58.decode(search_params.get("data")!), bs58.decode(search_params.get("nonce")!), shared_secret_dapp);
   if (!decrypted_data) return new Response("❌ expect decrypted data");
 
-  const { public_key, session } = JSON.parse(new TextDecoder().decode(decrypted_data));
-  if (!public_key) return new Response("❌ expect public_key");
+  const { public_key: pubkey, session } = JSON.parse(new TextDecoder().decode(decrypted_data));
+  if (!pubkey) return new Response("❌ expect public_key");
   if (!session) return new Response("❌ expect session");
 
   // 3. Set __SESSION__
   const session_data = get_session_data(session);
-  const body = `<script>window.__SESSION__=${JSON.stringify({ public_key, ...session_data })}</script>`
+  const body = `<script>window.__SESSION__=${JSON.stringify({ pubkey, ...session_data })}</script>`
   const response = new Response(body + html, {
     headers: { "content-type": "text/html" },
   });
 
-  // 4. Set public_key, session to cookie.
-  const web3_token = `mobile::${public_key}::${session}`;
+  // 4. Set pubkey, session to cookie.
+  const web3_token = `mobile::${pubkey}::${session}`;
   const cookies_domain = DOMAIN_WHITELIST.includes(hostname) ? '' : COOKIES_DOMAIN;
   const serialized_cookie = get_serialized_cookie(COOKIES_PHANTOM_KEY_NAME, web3_token, cookies_domain);
   response.headers.set('Set-Cookie', serialized_cookie);
