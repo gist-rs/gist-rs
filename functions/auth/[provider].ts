@@ -2,7 +2,7 @@
 import * as bs58 from "bs58";
 import * as nacl from "tweetnacl";
 import * as cookie from "cookie";
-import html from '../../dist/deeplink/index.html'
+import html from '../../dist/auth.html'
 
 const DOMAIN_WHITELIST = ['localhost', 'develop.gist-rs.pages.dev', 'gist-rs.pages.dev']
 const COOKIES_DOMAIN = '.gist.rs'
