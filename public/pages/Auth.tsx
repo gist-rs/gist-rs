@@ -14,7 +14,7 @@ const Auth = () => {
       <pre>
         <code>{session}</code>
       </pre>
-      <a href={`/u/${pubkey}`}>continue</a>
+      <a href={`/u/${pubkey}`}>accept term and continue</a>
     </div>
   )
 }
