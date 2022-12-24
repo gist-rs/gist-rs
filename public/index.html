@@ -33,15 +33,15 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPLDRH4ZKP"></script>
     <script>
       // Skip local
-      if (['localhost', '127.0.0.1', '', '.pages.dev'].indexOf(document.location.hostname) > -1) return
+      if (['localhost', '127.0.0.1', '', '.pages.dev'].indexOf(document.location.hostname) === -1) {
+        window.dataLayer = window.dataLayer || []
+        function gtag() {
+          dataLayer.push(arguments)
+        }
+        gtag('js', new Date())
 
-      window.dataLayer = window.dataLayer || []
-      function gtag() {
-        dataLayer.push(arguments)
+        gtag('config', 'G-YPLDRH4ZKP')
       }
-      gtag('js', new Date())
-
-      gtag('config', 'G-YPLDRH4ZKP')
     </script>
   </body>
 </html>
