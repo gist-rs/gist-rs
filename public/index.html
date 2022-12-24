@@ -32,6 +32,9 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPLDRH4ZKP"></script>
     <script>
+      // Skip local
+      if (['localhost', '127.0.0.1', '', '.pages.dev'].indexOf(document.location.hostname) > -1) return
+
       window.dataLayer = window.dataLayer || []
       function gtag() {
         dataLayer.push(arguments)
