@@ -14,13 +14,15 @@ export enum ProviderName {
 
 // https://docs.phantom.app/solana/integrating-phantom/deeplinks-ios-and-android/handling-sessions#session-structure
 const get_session_data = (session: string) => {
-  const encoded_payload = bs58.decode(session).slice(64);
-  const payload_string = new TextDecoder().decode(encoded_payload);
-  const payload = JSON.parse(payload_string);
+  const decoded_session = bs58.decode(session);
+  const signature = decoded_session.slice(0, 64);
+  const encoded_data = decoded_session.slice(64);
+  const data_string = new TextDecoder().decode(encoded_data);
+  const data = JSON.parse(data_string);
 
   return {
-    session,
-    payload
+    signature,
+    data
   }
 }
 
@@ -63,8 +65,8 @@ const handle_phantom_deeplink = async (context) => {
   if (!session) return new Response("❌ expect session");
 
   // 3. Set __SESSION__
-  const session_data = get_session_data(session);
-  const body = `<script>window.__SESSION__=${JSON.stringify({ pubkey, ...session_data })}</script>`
+  const { data } = get_session_data(session);
+  const body = `<script>window.__SESSION__=${JSON.stringify({ pubkey, session, data })}</script>`
   const response = new Response(body + html, {
     headers: { "content-type": "text/html" },
   });
