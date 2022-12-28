@@ -22,9 +22,11 @@ console_error_panic_hook = { version = "0.1.7", optional = true }
 cookie = { version = "0.16.1", features = ["percent-encode"] }
 nacl = "0.5.3"
 bs58 = "0.4.0"
+anyhow = "1.0.68"
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3.33"
+dotenv = "0.15.0"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dev-dependencies]
 tokio = { version = "1.21.1", features = ["full"] }

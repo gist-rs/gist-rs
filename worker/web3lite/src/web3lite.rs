@@ -12,11 +12,12 @@ impl Maybe for Headers {
     }
 }
 
-const PHANTOM_SESSION_KEY_NAME: &str = "phantom::session";
-const PHANTOM_ENCRYPTION_PUBLIC_KEY_KEY_NAME: &str = "PHANTOM_ENCRYPTION_PUBLIC_KEY";
+pub const PHANTOM_SESSION_KEY_NAME: &str = "phantom::session";
 
 pub async fn handle_transfer_req(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     let maybe_cookie_string = req.headers().get_some("Cookie");
+    let maybe_command = ctx.param("command");
+
     match maybe_cookie_string {
         Some(cookie_string) => {
             let mut cookies = cookie_string
@@ -28,6 +29,7 @@ pub async fn handle_transfer_req(req: Request, ctx: RouteContext<()>) -> Result<
 
             match maybe_cookie {
                 Some(cookie) => {
+                    // 1. Dynamic input.
                     let cookie_str = cookie.value();
                     let pubkey_session = cookie_str.split("::").collect::<Vec<_>>();
                     let target = pubkey_session[0];
@@ -36,28 +38,10 @@ pub async fn handle_transfer_req(req: Request, ctx: RouteContext<()>) -> Result<
 
                     console_log!("target:{:#?}", target);
                     console_log!("user_pubkey:{:#?}", user_pubkey_str);
-                    console_log!("session:{:#?}", session_str);
-
-                    // let session_bytes = bs58::decode(session_str)
-                    //     .into_vec()
-                    //     .expect("❌ expect session str.");
-
-                    // let pubkey_string = ctx
-                    //     .env
-                    //     .var(PHANTOM_ENCRYPTION_PUBLIC_KEY_KEY_NAME)?
-                    //     .to_string();
-                    // let pubkey_bytes = bs58::decode(pubkey_string)
-                    //     .into_vec()
-                    //     .expect("❌ expect pk.");
-
-                    // let verified_session_data = nacl::sign::open(&signature_bytes, &pubkey_bytes)
-                    //     .expect("❌ expect verified session.");
-
-                    // let session_data = str::from_utf8(&verified_session_data).unwrap_or("None");
+                    console_log!("session_str:{:#?}", session_str);
 
                     Response::ok(format!(
-                        "target:{:#?},user_pubkey_str:{:#?},session_str:{:#?}",
-                        target, user_pubkey_str, session_str
+                        "target:{target:#?},user_pubkey_str:{user_pubkey_str:#?},session_str:{session_str:#?}"
                     ))
                 }
                 None => Response::ok("❌ expect session."),
