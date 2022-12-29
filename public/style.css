@@ -120,7 +120,7 @@ a:link {
 }
 
 a:visited {
-  color: wheat;
+  color: white;
 }
 
 .tag {
@@ -134,4 +134,10 @@ a:visited {
   padding-right: 0.6em;
   line-height: 0.8em;
   color: crimson;
+}
+
+.sponsor {
+  padding-left: 1em;
+  font-size: 16px;
+  text-decoration: none;
 }

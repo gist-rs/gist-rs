@@ -12,6 +12,10 @@ export function Bar() {
   console.log('cached_data:', cached_data)
   const [data] = useState(cached_data)
 
+  if (!data?.pubkey) {
+    return <></>
+  }
+
   return (
     <div>
       <button>{data.pubkey}</button>

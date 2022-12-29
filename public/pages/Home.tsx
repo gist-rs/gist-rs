@@ -2,7 +2,6 @@ export function Home() {
   return (
     <div>
       <div id="bar" />
-      <a href="/sponsor">❤ Sponsor</a>
       <div class="app">
         <img src="./img/gist-logo-dark.svg" width="264" height="103" alt="gist.rs" />
         <br />
@@ -25,6 +24,9 @@ export function Home() {
         <section class="footer">
           <a href="https://github.com/gist-rs">
             <img src="./img/github-logo.svg" width="16" height="16" alt="github" />
+          </a>
+          <a class="sponsor" href="https://patreon.com/gist_rs" target="_blank" rel="noopener">
+            <img src="./img/sponsor.svg" width="16" height="16" alt="sponsor" />
           </a>
         </section>
       </div>
