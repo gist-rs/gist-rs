@@ -12,13 +12,14 @@ const authentication = async (context: any) => {
   const { pathname } = new URL(request.url)
 
   switch (pathname) {
-    case "/":
-      const original_body = await response.text();
-      const pubkey = '3mPuPCgmdexxcSYtpKDTPktTnEYHJcsZxCJdfemN1xgt';
-      const data = JSON.stringify({ pubkey });
-      const body = `<script>window.__STATE__=${data}</script>` + original_body
-      const new_response = new Response(body, response);
-      return new_response
+    // TODO: read from cookie?
+    // case "/":
+    //   const original_body = await response.text();
+    //   const pubkey = '3mPuPCgmdexxcSYtpKDTPktTnEYHJcsZxCJdfemN1xgt';
+    //   const data = JSON.stringify({ pubkey });
+    //   const body = `<script>window.__STATE__=${data}</script>` + original_body
+    //   const new_response = new Response(body, response);
+    //   return new_response
 
     default: return response;
   }
