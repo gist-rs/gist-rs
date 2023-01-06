@@ -28,13 +28,13 @@ export function Home() {
         <br />
         <hr />
         <section class="sponsors">
-          <a href="https://fastly.com">
+          <a href="https://fastly.com" target="_blank" rel="noopener">
             <img src="./img/fastly-logo.svg" width="64" height="32" alt="fastly" />
           </a>
         </section>
         <hr />
         <section class="footer">
-          <a href="https://github.com/gist-rs">
+          <a href="https://github.com/gist-rs" target="_blank" rel="noopener">
             <img src="./img/github-logo.svg" width="16" height="16" alt="github" />
           </a>
           <a class="sponsor" href="https://patreon.com/gist_rs" target="_blank" rel="noopener">
