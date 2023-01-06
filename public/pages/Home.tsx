@@ -27,12 +27,6 @@ export function Home() {
         </a>
         <br />
         <hr />
-        <section class="sponsors">
-          <a href="https://fastly.com" target="_blank" rel="noopener">
-            <img src="./img/fastly-logo.svg" width="64" height="32" alt="fastly" />
-          </a>
-        </section>
-        <hr />
         <section class="footer">
           <a href="https://github.com/gist-rs" target="_blank" rel="noopener">
             <img src="./img/github-logo.svg" width="16" height="16" alt="github" />
@@ -42,6 +36,13 @@ export function Home() {
           </a>
           <a class="katopz" href="mailto:katopz@gist.rs" target="_blank" rel="noopener">
             <img src="./img/email.svg" width="16" height="16" alt="katopz" />
+          </a>
+        </section>
+        <hr />
+        <section class="sponsors">
+          <small>sponsored by</small>
+          <a href="https://fastly.com" target="_blank" rel="noopener">
+            <img src="./img/fastly-logo.svg" width="32" height="32" alt="fastly" />
           </a>
         </section>
       </div>

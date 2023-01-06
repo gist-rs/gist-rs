@@ -108,8 +108,14 @@ hr {
 }
 
 .sponsors {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
   font-size: x-small;
-  padding: 1em;
+}
+
+.sponsors small {
+  margin-top: -0.5em;
 }
 
 .sponsors a {
