@@ -72,7 +72,7 @@ const handle_phantom_deeplink = async (context) => {
   });
 
   // 4. Set pubkey, session to cookie.
-  const web3_token = `mobile::${pubkey}::${session}::${data}`;
+  const web3_token = `${pubkey}|${session}|${data}`;
   const cookies_domain = DOMAIN_WHITELIST.includes(hostname) ? '' : COOKIES_DOMAIN;
   const serialized_cookie = get_serialized_cookie(COOKIES_PHANTOM_KEY_NAME, web3_token, cookies_domain);
   response.headers.set('Set-Cookie', serialized_cookie);

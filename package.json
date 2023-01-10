@@ -6,7 +6,8 @@
 		"serve": "wmr serve",
 		"dev": "nodemon --ignore dist --exec yarn build",
 		"kill": "kill $(lsof -i tcp:8788) &> /dev/null || true",
-		"dev-pages": "yarn kill && npx wrangler pages dev dist --local --compatibility-date=2022-12-09"
+		"dev-pages": "yarn kill && npx wrangler pages dev dist --local --compatibility-date=2022-12-09",
+		"publish": "npx wrangler pages publish ."
 	},
 	"eslintConfig": {
 		"extends": "preact"

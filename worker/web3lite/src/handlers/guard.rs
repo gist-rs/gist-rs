@@ -14,9 +14,19 @@ impl Maybe for Headers {
 
 pub const PHANTOM_SESSION_KEY_NAME: &str = "phantom::session";
 
-pub async fn handle_transfer_req(req: Request, ctx: RouteContext<()>) -> Result<Response> {
+#[derive(Debug)]
+pub struct Web3TokenRaw {
+    user_pubkey: String,
+    session: String,
+    data: String,
+}
+
+pub fn handle_web3_req(
+    req: Request,
+    ctx: RouteContext<()>,
+    callback: fn(req: Request, ctx: RouteContext<()>, web3_token: Web3TokenRaw) -> Result<Response>,
+) -> Result<Response> {
     let maybe_cookie_string = req.headers().get_some("Cookie");
-    let maybe_command = ctx.param("command");
 
     match maybe_cookie_string {
         Some(cookie_string) => {
@@ -31,18 +41,25 @@ pub async fn handle_transfer_req(req: Request, ctx: RouteContext<()>) -> Result<
                 Some(cookie) => {
                     // 1. Dynamic input.
                     let cookie_str = cookie.value();
-                    let pubkey_session = cookie_str.split("::").collect::<Vec<_>>();
-                    let target = pubkey_session[0];
-                    let user_pubkey_str = pubkey_session[1];
-                    let session_str = pubkey_session[2];
+                    let pubkey_session = cookie_str.split("|").collect::<Vec<_>>();
+                    let user_pubkey = pubkey_session[0].to_owned();
+                    let session = pubkey_session[1].to_owned();
+                    let data = pubkey_session[2].to_owned();
 
-                    console_log!("target:{:#?}", target);
-                    console_log!("user_pubkey:{:#?}", user_pubkey_str);
-                    console_log!("session_str:{:#?}", session_str);
+                    let response_result = callback(
+                        req,
+                        ctx,
+                        Web3TokenRaw {
+                            user_pubkey,
+                            session,
+                            data,
+                        },
+                    );
 
-                    Response::ok(format!(
-                        "target:{target:#?},user_pubkey_str:{user_pubkey_str:#?},session_str:{session_str:#?}"
-                    ))
+                    match response_result {
+                        Ok(response) => Ok(response),
+                        Err(error) => return Response::ok(format!("❌ error: {error:?}.")),
+                    }
                 }
                 None => Response::ok("❌ expect session."),
             }

@@ -1,8 +1,8 @@
+use handlers::{nft::handle_nft_req, transfer::handle_transfer_req};
 use worker::*;
 
+mod handlers;
 mod utils;
-mod web3lite;
-use web3lite::handle_transfer_req;
 
 fn log_request(req: &Request) {
     console_log!(
@@ -32,6 +32,9 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     router
         .get_async("/transfer/:command", |req, ctx| async move {
             handle_transfer_req(req, ctx).await
+        })
+        .get_async("/nft/:address", |req, ctx| async move {
+            handle_nft_req(req, ctx).await
         })
         // .get("/", |_, _| Response::ok("Hello from Workers!"))
         // .post_async("/form/:field", |mut req, ctx| async move {
