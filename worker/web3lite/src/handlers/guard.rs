@@ -41,7 +41,7 @@ pub fn handle_web3_req(
                 Some(cookie) => {
                     // 1. Dynamic input.
                     let cookie_str = cookie.value();
-                    let pubkey_session = cookie_str.split("|").collect::<Vec<_>>();
+                    let pubkey_session = cookie_str.split('|').collect::<Vec<_>>();
                     let user_pubkey = pubkey_session[0].to_owned();
                     let session = pubkey_session[1].to_owned();
                     let data = pubkey_session[2].to_owned();
