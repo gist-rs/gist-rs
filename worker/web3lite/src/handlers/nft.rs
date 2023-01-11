@@ -13,6 +13,6 @@ pub fn handle_nft_web3_token(
 ) -> Result<Response> {
     let maybe_address = ctx.param("address");
     Response::ok(format!(
-        "web3_token:{web3_token:#?}, maybe_address:{maybe_address:?}, web3_token: {web3_token:?}"
+        "web3_token: {web3_token:#?}, maybe_address: {maybe_address:?}, web3_token: {web3_token:?}"
     ))
 }
