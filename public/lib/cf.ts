@@ -1,12 +1,6 @@
-type IUserSession = {
-  pubkey: String,
-  phantom: {
-    data: { app_url: String, timestamp: number, chain: 'solana', cluster: 'mainnet-beta' | 'devnet' | 'testnet' },
-    session: String,
-  }
-}
+import { UserSessionType } from '../../model/session'
 
-export const get_user_session = (): IUserSession => {
+export const get_user_session = (): UserSessionType => {
   // @ts-ignore
   const session = window.__SESSION__ ? window.__SESSION__ : {
     pubkey: 'cat9ZgXRQA3yCRCNaFyswDqZhQuDsJEvVnfzWfdWNdX',

@@ -3,6 +3,7 @@ import * as bs58 from "bs58";
 import * as nacl from "tweetnacl";
 import * as cookie from "cookie";
 import html from '../../dist/auth.html'
+import { UserSessionType } from '../../model/session'
 
 const DOMAIN_WHITELIST = ['localhost', 'develop.gist-rs.pages.dev', 'gist-rs.pages.dev']
 const COOKIES_DOMAIN = '.gist.rs'
@@ -69,7 +70,7 @@ const handle_phantom_deeplink = async (context) => {
   const body = `<script>window.__SESSION__=${JSON.stringify({
     pubkey,
     phantom: { session, data }
-  })}</script>`
+  } as UserSessionType)}</script>`
   const response = new Response(body + html, {
     headers: { "content-type": "text/html" },
   });
