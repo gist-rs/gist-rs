@@ -58,12 +58,12 @@ pub fn handle_web3_req(
 
                     match response_result {
                         Ok(response) => Ok(response),
-                        Err(error) => return Response::ok(format!("❌ error: {error:?}.")),
+                        Err(error) => return Response::ok(format!("ERROR: error: {error:?}.")),
                     }
                 }
-                None => Response::ok("❌ expect session."),
+                None => Response::ok("ERROR: expect session."),
             }
         }
-        None => Response::ok("❌ expect cookie."),
+        None => Response::ok("ERROR: expect cookie."),
     }
 }

@@ -4,16 +4,16 @@ pub const PHANTOM_ENCRYPTION_PUBKEY_KEY_NAME: &str = "PHANTOM_ENCRYPTION_PUBLIC_
 pub fn verify_session_data(encryption_pubkey: &str, session_str: &str) -> anyhow::Result<String> {
     let session_bytes = bs58::decode(session_str)
         .into_vec()
-        .expect("❌ expect session str.");
+        .expect("ERROR: expect session str.");
 
     let pubkey_bytes = bs58::decode(encryption_pubkey)
         .into_vec()
-        .expect("❌ expect pk.");
+        .expect("ERROR: expect pk.");
 
     let verified_session_data =
-        nacl::sign::open(&session_bytes, &pubkey_bytes).expect("❌ expect verified session.");
+        nacl::sign::open(&session_bytes, &pubkey_bytes).expect("ERROR: expect verified session.");
 
-    let session_data = str::from_utf8(&verified_session_data).expect("❌ expect session data");
+    let session_data = str::from_utf8(&verified_session_data).expect("ERROR: expect session data");
 
     Ok(session_data.to_owned())
 }
