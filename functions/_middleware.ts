@@ -5,7 +5,7 @@ interface Env {
 const authentication = async (context: any) => {
   const response: Response = await context.next()
   // const value = await context.env.KV.get('example');
-  response.headers.set('x-token', 'god')
+  // response.headers.set('x-token', 'god')
 
   // Inject data to index page
   const request: Request = context.request;
