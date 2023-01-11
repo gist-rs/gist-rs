@@ -4,6 +4,7 @@ import { get_user_session } from '../lib/cf'
 
 const Auth = () => {
   const user_session = get_user_session()
+  console.log('user_session:', user_session)
   const [pubkey] = useState(user_session.pubkey)
   const [session] = useState(user_session.phantom.session)
   const [data] = useState(user_session.phantom.data)

@@ -66,7 +66,10 @@ const handle_phantom_deeplink = async (context) => {
 
   // 3. Set __SESSION__
   const { data } = get_session_data(session);
-  const body = `<script>window.__SESSION__=${JSON.stringify({ pubkey, session, data })}</script>`
+  const body = `<script>window.__SESSION__=${JSON.stringify({
+    pubkey,
+    phantom: { session, data }
+  })}</script>`
   const response = new Response(body + html, {
     headers: { "content-type": "text/html" },
   });
