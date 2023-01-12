@@ -1,4 +1,5 @@
 use reqwest::Url;
+use serde_json::json;
 use worker::{console_log, Error, Request, Response, Result, RouteContext};
 
 use super::guard::{extract_web3_token, Web3Token};
@@ -13,9 +14,21 @@ pub async fn handle_nft_req(req: Request, ctx: RouteContext<()>) -> Result<Respo
 }
 
 async fn fetch(url: String) -> anyhow::Result<Result<Response>> {
-    let response = reqwest::get(url).await?;
-    let bytes = response.bytes().await?;
-    let result = Response::from_bytes(bytes.to_vec());
+    // let response = reqwest::get(url).await?;
+    // let bytes = response.bytes().await?;
+    // let result = Response::from_bytes(bytes.to_vec());
+    // Ok(result)
+
+    console_log!("url: {url:?}");
+
+    let body = reqwest::get("https://arweave.net/y5e5DJsiwH0s_ayfMwYk-SnrZtVZzHLQDSTZ5dNRUHA")
+        .await?
+        .text()
+        .await?;
+
+    console_log!("body: {body:?}");
+
+    let result = Response::from_html("ok");
     Ok(result)
 }
 
@@ -68,7 +81,7 @@ pub async fn handle_nft_web3_token(
             // 2. Fetch content from url
             match fetch(url).await {
                 Ok(result) => result,
-                Err(err) => return Err(Error::from("ERROR: expect content.")),
+                Err(error) => return Err(Error::from(error.to_string())),
             }
         }
         None => Response::ok("ERROR: expect address."),

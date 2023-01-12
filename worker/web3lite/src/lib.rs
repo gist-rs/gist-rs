@@ -36,26 +36,18 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .get_async("/nft/:address", |req, ctx| async move {
             handle_nft_req(req, ctx).await
         })
-        .get("/hello", |_, _| Response::ok("Hello from Workers!"))
-        // .post_async("/form/:field", |mut req, ctx| async move {
-        //     if let Some(name) = ctx.param("field") {
-        //         let form = req.form_data().await?;
-        //         match form.get(name) {
-        //             Some(FormEntry::Field(value)) => {
-        //                 return Response::from_json(&json!({ name: value }))
-        //             }
-        //             Some(FormEntry::File(_)) => {
-        //                 return Response::error("`field` param in form shouldn't be a File", 422);
-        //             }
-        //             None => return Response::error("Bad Request", 400),
-        //         }
-        //     }
-        //     Response::error("Bad Request", 400)
-        // })
-        // .get("/worker-version", |_, ctx| {
-        //     let version = ctx.var("WORKERS_RS_VERSION")?.to_string();
-        //     Response::ok(version)
-        // })
+        .get_async("/hello", |_, _| async move {
+            let body = reqwest::get("https://developers.cloudflare.com/")
+                .await
+                .unwrap()
+                .text()
+                .await
+                .unwrap();
+
+            console_log!("body: {body:?}");
+
+            Response::ok("Hello from Workers!")
+        })
         .run(req, env)
         .await
 }
