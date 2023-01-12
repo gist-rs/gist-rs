@@ -17,21 +17,21 @@ pub const PHANTOM_SESSION_KEY_NAME: &str = "phantom::session";
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Web3Token {
-    wallet_address: String,
-    phantom: PhantomMobile,
+    pub wallet_address: String,
+    pub phantom: PhantomMobile,
 }
 #[derive(Serialize, Deserialize, Debug)]
 
-struct PhantomMobile {
-    session: String,
-    data: PhantomConnectionData,
+pub struct PhantomMobile {
+    pub session: String,
+    pub data: PhantomConnectionData,
 }
 #[derive(Serialize, Deserialize, Debug)]
-struct PhantomConnectionData {
-    app_url: String,
-    timestamp: i64,
-    chain: String,
-    cluster: String,
+pub struct PhantomConnectionData {
+    pub app_url: String,
+    pub timestamp: i64,
+    pub chain: String,
+    pub cluster: String,
 }
 
 pub fn extract_web3_token(req: &Request) -> anyhow::Result<Web3Token> {

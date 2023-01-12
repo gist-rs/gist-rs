@@ -1,8 +1,11 @@
-use reqwest::Url;
-use serde_json::json;
-use worker::{console_log, Error, Request, Response, Result, RouteContext};
+use std::str::FromStr;
 
 use super::guard::{extract_web3_token, Web3Token};
+use reqwest::Url;
+
+use solana_web3_wasm::mpl_token_metadata::state::Metadata;
+use solana_web3_wasm::{info::nft::NftInformation, solana_sdk::pubkey::Pubkey};
+use worker::{console_log, Error, Request, Response, Result, RouteContext};
 
 pub async fn handle_nft_req(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     let web3_token_result = extract_web3_token(&req);
@@ -56,21 +59,50 @@ async fn get_kv_text(ctx: &RouteContext<()>, namespace: &str, key_name: &str) ->
     }
 }
 
+async fn get_user_nft_metadata(
+    cluster_str: &str,
+    wallet_address: &str,
+    mint_address: &str,
+) -> anyhow::Result<Metadata> {
+    let nft_information = NftInformation::new_from_str(cluster_str).expect("expect valid cluster");
+    let wallet_pubkey = Pubkey::from_str(wallet_address)?;
+    let mint_pubkey = Pubkey::from_str(mint_address)?;
+    let mut nfts = nft_information
+        .find_nfts_by_mints(&wallet_pubkey, &[mint_pubkey])
+        .await?;
+
+    let metadata = nfts.remove(mint_address).expect("expect metadata");
+
+    Ok(metadata)
+}
+
 pub async fn handle_nft_web3_token(
     req: &Request,
     ctx: &RouteContext<()>,
     web3_token: Web3Token,
 ) -> Result<Response> {
-    let maybe_address = ctx.param("address");
+    let maybe_mint_address = ctx.param("address");
     let url = req.url().expect("ERROR: expect url");
-    let maybe_chain = get_query_param_value(&url, "chain");
-    let maybe_cluster = get_query_param_value(&url, "cluster");
+    let chain = get_query_param_value(&url, "chain").unwrap_or("solana".to_owned());
+    let cluster = get_query_param_value(&url, "cluster").unwrap_or("mainnet".to_owned());
 
-    console_log!("handle_nft_web3_token: {maybe_chain:?}, {maybe_cluster:?}");
+    console_log!("handle_nft_web3_token: {chain:?}, {cluster:?}");
 
-    let response = match maybe_address {
+    let response = match maybe_mint_address {
         Some(mint_address) => {
-            // 1. Get KV
+            // 1. TODO: Validate web token
+            let wallet_address = web3_token.wallet_address;
+
+            // 2. Get NFT for user if has
+            let nft_metadata =
+                match get_user_nft_metadata(&cluster, &wallet_address, mint_address).await {
+                    Ok(metadata) => metadata,
+                    Err(error) => return Response::error(error.to_string(), 403),
+                };
+
+            console_log!("nft_metadata:{nft_metadata:#?}");
+
+            // 3. Get KV
             let value: Option<String> = get_kv_text(ctx, "NFT", mint_address).await;
 
             let url = match value {
@@ -86,7 +118,7 @@ pub async fn handle_nft_web3_token(
             //     Err(error) => return Err(Error::from(error.to_string())),
             // }
         }
-        None => "".to_owned(),
+        None => return Response::error("ERROR: expect address", 403),
     };
 
     Response::ok(response)

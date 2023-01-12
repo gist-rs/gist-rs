@@ -2378,7 +2378,7 @@ dependencies = [
 [[package]]
 name = "solana-web3-wasm"
 version = "0.5.0"
-source = "git+https://github.com/avareum/solana-web3-wasm?rev=50bb514#50bb514262904ccba9deedd24f5a437b6967034f"
+source = "git+https://github.com/avareum/solana-web3-wasm?rev=ccc147a#ccc147ab4a51c3628250c37b86fb4b720b8a7fb0"
 dependencies = [
  "anyhow",
  "borsh",
