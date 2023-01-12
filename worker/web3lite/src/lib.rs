@@ -38,7 +38,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         })
         // POC
         .post_async("/kv", |_req, ctx| async move {
-            let kv = ctx.kv("gist::content")?;
+            let kv = ctx.kv("gist::solana::devnet")?;
 
             kv.put(
                 "A2NzysADP3a6FzgKkh4dzQbwK6CgsJcdo3Rz6opfFMPy",

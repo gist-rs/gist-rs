@@ -26,7 +26,7 @@ pub async fn handle_nft_web3_token(
     let response = match maybe_address {
         Some(mint_address) => {
             // 1. Get KV
-            let kv = ctx.kv("gist::content").expect("ERROR: expect KV.");
+            let kv = ctx.kv("gist::solana::devnet").expect("ERROR: expect KV.");
             let url = kv
                 .get(mint_address)
                 .text()
