@@ -2,11 +2,11 @@ use worker::{Error, Request, Response, Result, RouteContext};
 
 use super::guard::{extract_web3_token, Web3Token};
 
-pub async fn handle_nft_req(req: Request, ctx: RouteContext<()>) -> Result<Response> {
+pub async fn handle_nft_req(req: &Request, ctx: &RouteContext<()>) -> Result<Response> {
     let web3_token_raw = extract_web3_token(req);
 
     match web3_token_raw {
-        Ok(web3_token_raw) => handle_nft_web3_token(&ctx, web3_token_raw).await,
+        Ok(web3_token_raw) => handle_nft_web3_token(&req, &ctx, web3_token_raw).await,
         Err(err) => Err(Error::from(format!("${err}"))),
     }
 }
@@ -19,6 +19,7 @@ async fn fetch(url: String) -> anyhow::Result<Result<Response>> {
 }
 
 pub async fn handle_nft_web3_token(
+    _req: &Request,
     ctx: &RouteContext<()>,
     web3_token: Web3Token,
 ) -> Result<Response> {

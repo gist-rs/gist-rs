@@ -34,7 +34,7 @@ struct PhantomConnectionData {
     cluster: String,
 }
 
-pub fn extract_web3_token(req: Request) -> anyhow::Result<Web3Token> {
+pub fn extract_web3_token(req: &Request) -> anyhow::Result<Web3Token> {
     let cookie_string = req
         .headers()
         .get_some("Cookie")
