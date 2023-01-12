@@ -36,7 +36,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .get_async("/nft/:address", |req, ctx| async move {
             handle_nft_req(req, ctx).await
         })
-        .get_async("/hello", |_, _| async move {
+        .get_async("/hello/:test", |_, _| async move {
             let body = reqwest::get("https://developers.cloudflare.com/")
                 .await
                 .unwrap()
