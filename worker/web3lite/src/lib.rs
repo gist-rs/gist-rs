@@ -34,7 +34,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             handle_transfer_req(req, ctx).await
         })
         .get_async("/nft/:address", |req, ctx| async move {
-            handle_nft_req(req, ctx).await
+            handle_nft_req(&req, &ctx).await
         })
         // POC
         .post_async("/kv", |_req, ctx| async move {
