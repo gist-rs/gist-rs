@@ -78,14 +78,16 @@ pub async fn handle_nft_web3_token(
                 None => return Err(Error::from("ERROR: expect value.")),
             };
 
+            url
+
             // 2. Fetch content from url
-            match fetch(url).await {
-                Ok(result) => result,
-                Err(error) => return Err(Error::from(error.to_string())),
-            }
+            // match fetch(url).await {
+            //     Ok(result) => result,
+            //     Err(error) => return Err(Error::from(error.to_string())),
+            // }
         }
-        None => Response::ok("ERROR: expect address."),
+        None => "".to_owned(),
     };
 
-    response
+    Response::ok(response)
 }
