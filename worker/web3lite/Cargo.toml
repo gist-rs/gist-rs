@@ -25,6 +25,8 @@ nacl = "0.5.3"
 bs58 = "0.4.0"
 anyhow = "1.0.68"
 reqwest = { version = "0.11" , features = ["json"] }
+
+getrandom = { version = "0.2", features = ["js"] }
 solana-web3-wasm = { git = "https://github.com/avareum/solana-web3-wasm", rev="50bb514"}
 
 [dev-dependencies]

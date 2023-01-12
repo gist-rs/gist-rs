@@ -3,8 +3,8 @@ use worker::{console_log, Error, Request, Response, Result, RouteContext};
 
 use super::guard::{extract_web3_token, Web3Token};
 
-pub async fn handle_nft_req(req: &Request, ctx: &RouteContext<()>) -> Result<Response> {
-    let web3_token_result = extract_web3_token(req);
+pub async fn handle_nft_req(req: Request, ctx: RouteContext<()>) -> Result<Response> {
+    let web3_token_result = extract_web3_token(&req);
 
     match web3_token_result {
         Ok(web3_token) => handle_nft_web3_token(&req, &ctx, web3_token).await,
@@ -31,6 +31,18 @@ fn get_query_param_value(url: &Url, key_name: &str) -> Option<String> {
         .map(|x| x.1.to_string())
 }
 
+async fn get_kv_text(ctx: &RouteContext<()>, namespace: &str, key_name: &str) -> Option<String> {
+    // Some("https://arweave.net/y5e5DJsiwH0s_ayfMwYk-SnrZtVZzHLQDSTZ5dNRUHA".to_owned())
+    let kv = ctx.kv(namespace);
+    match kv {
+        Ok(kv_store) => match kv_store.get(key_name).text().await {
+            Ok(value) => value,
+            Err(_) => None,
+        },
+        Err(_) => None,
+    }
+}
+
 pub async fn handle_nft_web3_token(
     req: &Request,
     ctx: &RouteContext<()>,
@@ -39,25 +51,28 @@ pub async fn handle_nft_web3_token(
     let maybe_address = ctx.param("address");
     let url = req.url().expect("ERROR: expect url");
     let maybe_chain = get_query_param_value(&url, "chain");
+    let maybe_cluster = get_query_param_value(&url, "cluster");
 
-    console_log!("handle_nft_web3_token: {maybe_chain:?}");
+    console_log!("handle_nft_web3_token: {maybe_chain:?}, {maybe_cluster:?}");
 
     let response = match maybe_address {
         Some(mint_address) => {
             // 1. Get KV
-            let kv = ctx.kv("gist::solana::devnet").expect("ERROR: expect KV.");
-            let url = kv
-                .get(mint_address)
-                .text()
-                .await
-                .expect("ERROR: result.")
-                .expect("ERROR: expect url.");
+            let value: Option<String> = get_kv_text(ctx, "worker-NFT", mint_address).await;
+
+            let url = match value {
+                Some(value) => value,
+                None => return Err(Error::from("ERROR: expect value.")),
+            };
 
             // 2. Fetch content from url
-            fetch(url).await.expect("ERROR: expect content.")
+            match fetch(url).await {
+                Ok(result) => result,
+                Err(err) => return Err(Error::from("ERROR: expect content.")),
+            }
         }
         None => Response::ok("ERROR: expect address."),
     };
 
-    response.map_err(Error::from)
+    response
 }

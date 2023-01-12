@@ -39,7 +39,6 @@ const get_serialized_cookie = (key: string, web3_token: string, cookies_domain: 
 }
 
 const handle_phantom_deeplink = async (context) => {
-  console.log('context:', context);
   // 1. Gathering params.
   const request: Request = context.request;
   const { searchParams: search_params, hostname } = new URL(request.url);

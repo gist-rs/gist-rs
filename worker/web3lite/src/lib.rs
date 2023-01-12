@@ -34,27 +34,9 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             handle_transfer_req(req, ctx).await
         })
         .get_async("/nft/:address", |req, ctx| async move {
-            handle_nft_req(&req, &ctx).await
+            handle_nft_req(req, ctx).await
         })
-        // POC
-        .post_async("/kv", |_req, ctx| async move {
-            let kv = ctx.kv("gist::solana::devnet")?;
-
-            kv.put(
-                "A2NzysADP3a6FzgKkh4dzQbwK6CgsJcdo3Rz6opfFMPy",
-                "https://arweave.net/y5e5DJsiwH0s_ayfMwYk-SnrZtVZzHLQDSTZ5dNRUHA",
-            )?
-            .execute()
-            .await?;
-            let url = kv
-                .get("A2NzysADP3a6FzgKkh4dzQbwK6CgsJcdo3Rz6opfFMPy")
-                .text()
-                .await?
-                .ok_or_else(|| "ERROR: Not exist".to_owned())?;
-
-            Response::ok(url)
-        })
-        // .get("/", |_, _| Response::ok("Hello from Workers!"))
+        .get("/hello", |_, _| Response::ok("Hello from Workers!"))
         // .post_async("/form/:field", |mut req, ctx| async move {
         //     if let Some(name) = ctx.param("field") {
         //         let form = req.form_data().await?;
