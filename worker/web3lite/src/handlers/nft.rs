@@ -8,7 +8,7 @@ pub async fn handle_nft_req(req: Request, ctx: RouteContext<()>) -> Result<Respo
 
     match web3_token_result {
         Ok(web3_token) => handle_nft_web3_token(&req, &ctx, web3_token).await,
-        Err(err) => Err(Error::from(format!("${err}"))),
+        Err(err) => Response::error(format!("${err}"), 403),
     }
 }
 
@@ -58,7 +58,7 @@ pub async fn handle_nft_web3_token(
     let response = match maybe_address {
         Some(mint_address) => {
             // 1. Get KV
-            let value: Option<String> = get_kv_text(ctx, "worker-NFT", mint_address).await;
+            let value: Option<String> = get_kv_text(ctx, "NFT", mint_address).await;
 
             let url = match value {
                 Some(value) => value,
