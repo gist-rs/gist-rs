@@ -1,6 +1,7 @@
 use cookie::Cookie;
+use serde::{Deserialize, Serialize};
 use std::str;
-use worker::{console_log, Headers, Request, Response, Result, RouteContext};
+use worker::{Headers, Request};
 
 trait Maybe {
     fn get_some(&self, key: &str) -> Option<String>;
@@ -14,56 +15,51 @@ impl Maybe for Headers {
 
 pub const PHANTOM_SESSION_KEY_NAME: &str = "phantom::session";
 
-#[derive(Debug)]
-pub struct Web3TokenRaw {
-    user_pubkey: String,
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Web3Token {
+    wallet_address: String,
+    phantom: PhantomMobile,
+}
+#[derive(Serialize, Deserialize, Debug)]
+
+struct PhantomMobile {
     session: String,
-    data: String,
+    data: PhantomConnectionData,
+}
+#[derive(Serialize, Deserialize, Debug)]
+struct PhantomConnectionData {
+    app_url: String,
+    timestamp: i64,
+    chain: String,
+    cluster: String,
 }
 
-pub fn handle_web3_req(
-    req: Request,
-    ctx: RouteContext<()>,
-    callback: fn(req: Request, ctx: RouteContext<()>, web3_token: Web3TokenRaw) -> Result<Response>,
-) -> Result<Response> {
-    let maybe_cookie_string = req.headers().get_some("Cookie");
+pub fn extract_web3_token(req: Request) -> anyhow::Result<Web3Token> {
+    let cookie_string = req
+        .headers()
+        .get_some("Cookie")
+        .expect("ERROR: expect cookie.");
 
-    match maybe_cookie_string {
-        Some(cookie_string) => {
-            let mut cookies = cookie_string
-                .split(';')
-                .map(|s| s.trim())
-                .filter(|s| !s.is_empty())
-                .flat_map(Cookie::parse_encoded);
-            let maybe_cookie = cookies.find(|e| e.name() == PHANTOM_SESSION_KEY_NAME);
+    let mut cookies = cookie_string
+        .split(';')
+        .map(|s| s.trim())
+        .filter(|s| !s.is_empty())
+        .flat_map(Cookie::parse_encoded);
 
-            match maybe_cookie {
-                Some(cookie) => {
-                    // 1. Dynamic input.
-                    let cookie_str = cookie.value();
-                    let pubkey_session = cookie_str.split('|').collect::<Vec<_>>();
-                    let user_pubkey = pubkey_session[0].to_owned();
-                    let session = pubkey_session[1].to_owned();
-                    let data = pubkey_session[2].to_owned();
+    let cookie = cookies
+        .find(|e| e.name() == PHANTOM_SESSION_KEY_NAME)
+        .expect("ERROR: expect session.");
 
-                    let response_result = callback(
-                        req,
-                        ctx,
-                        Web3TokenRaw {
-                            user_pubkey,
-                            session,
-                            data,
-                        },
-                    );
+    // 1. Dynamic input.
+    let cookie_str = cookie.value();
+    let pubkey_session = cookie_str.split('|').collect::<Vec<_>>();
+    let user_pubkey = pubkey_session[0].to_owned();
+    let session = pubkey_session[1].to_owned();
+    let data_string = pubkey_session[2].to_owned();
+    let data = serde_json::from_str(data_string.as_str())?;
 
-                    match response_result {
-                        Ok(response) => Ok(response),
-                        Err(error) => return Response::ok(format!("ERROR: error: {error:?}.")),
-                    }
-                }
-                None => Response::ok("ERROR: expect session."),
-            }
-        }
-        None => Response::ok("ERROR: expect cookie."),
-    }
+    Ok(Web3Token {
+        wallet_address: user_pubkey,
+        phantom: PhantomMobile { session, data },
+    })
 }

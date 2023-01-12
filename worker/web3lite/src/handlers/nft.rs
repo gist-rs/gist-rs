@@ -1,18 +1,44 @@
-use worker::{Request, Response, Result, RouteContext};
+use worker::{Error, Request, Response, Result, RouteContext};
 
-use super::guard::{handle_web3_req, Web3TokenRaw};
+use super::guard::{extract_web3_token, Web3Token};
 
 pub async fn handle_nft_req(req: Request, ctx: RouteContext<()>) -> Result<Response> {
-    handle_web3_req(req, ctx, handle_nft_web3_token)
+    let web3_token_raw = extract_web3_token(req);
+
+    match web3_token_raw {
+        Ok(web3_token_raw) => handle_nft_web3_token(&ctx, web3_token_raw).await,
+        Err(err) => Err(Error::from(format!("${err}"))),
+    }
 }
 
-pub fn handle_nft_web3_token(
-    _req: Request,
-    ctx: RouteContext<()>,
-    web3_token: Web3TokenRaw,
+async fn fetch(url: String) -> anyhow::Result<Result<Response>> {
+    let response = reqwest::get(url).await?;
+    let bytes = response.bytes().await?;
+    let result = Response::from_bytes(bytes.to_vec());
+    Ok(result)
+}
+
+pub async fn handle_nft_web3_token(
+    ctx: &RouteContext<()>,
+    web3_token: Web3Token,
 ) -> Result<Response> {
     let maybe_address = ctx.param("address");
-    Response::ok(format!(
-        "web3_token: {web3_token:#?}, maybe_address: {maybe_address:?}, web3_token: {web3_token:?}"
-    ))
+    let response = match maybe_address {
+        Some(mint_address) => {
+            // 1. Get KV
+            let kv = ctx.kv("gist::content").expect("ERROR: expect KV.");
+            let url = kv
+                .get(mint_address)
+                .text()
+                .await
+                .expect("ERROR: result.")
+                .expect("ERROR: expect url.");
+
+            // 2. Fetch content from url
+            fetch(url).await.expect("ERROR: expect content.")
+        }
+        None => Response::ok("ERROR: expect address."),
+    };
+
+    response.map_err(Error::from)
 }
