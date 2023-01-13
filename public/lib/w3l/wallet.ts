@@ -1,4 +1,4 @@
-import { Web3LiteClient } from "."
+import { Web3LiteClient } from "./client"
 
 export class Web3LiteWallet {
   client: Web3LiteClient
