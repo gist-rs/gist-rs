@@ -4,7 +4,7 @@
 		"jsx": "preserve",
 		"jsxFactory": "preact.h",
 		"jsxFragmentFactory": "preact.Fragment",
-		"allowJs": false,
+		"allowJs": true,
 		"checkJs": true,
 		// "strict": true,
 		"noEmit": true,
