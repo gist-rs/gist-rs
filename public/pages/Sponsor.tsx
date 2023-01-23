@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'preact/hooks'
 import { get_qr } from '../lib/qr'
-import { get_solana_pay_link, Web3LiteClient, Web3LiteWallet } from '../lib/w3l'
 
 import mobile from 'is-mobile'
+import { Web3LiteClient } from '../lib/w3l/client'
+import { get_solana_pay_link } from '../lib/w3l/mobile'
+import { Web3LiteWallet } from '../lib/w3l/wallet'
 const is_mobile = mobile()
 
 export const GIST_PUBKEY = 'gistmeAhMG7AcKSPCHis8JikGmKT9tRRyZpyMLNNULq'
