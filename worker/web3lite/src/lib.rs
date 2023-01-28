@@ -44,9 +44,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 .await
                 .unwrap();
 
-            console_log!("body: {body:?}");
-
-            Response::ok("Hello from Workers!")
+            Response::ok(body)
         })
         .run(req, env)
         .await
