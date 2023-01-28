@@ -17,22 +17,22 @@ pub async fn handle_nft_req(req: Request, ctx: RouteContext<()>) -> Result<Respo
 }
 
 async fn fetch(url: String) -> anyhow::Result<Result<Response>> {
-    // let response = reqwest::get(url).await?;
-    // let bytes = response.bytes().await?;
-    // let result = Response::from_bytes(bytes.to_vec());
-    // Ok(result)
-
     console_log!("url: {url:?}");
 
-    let body = reqwest::get("https://arweave.net/y5e5DJsiwH0s_ayfMwYk-SnrZtVZzHLQDSTZ5dNRUHA")
-        .await?
-        .text()
-        .await?;
-
-    console_log!("body: {body:?}");
-
-    let result = Response::from_html("ok");
+    let response = reqwest::get(url).await?;
+    let bytes = response.bytes().await?;
+    let result = Response::from_bytes(bytes.to_vec());
     Ok(result)
+
+    // let body = reqwest::get("https://arweave.net/y5e5DJsiwH0s_ayfMwYk-SnrZtVZzHLQDSTZ5dNRUHA")
+    //     .await?
+    //     .text()
+    //     .await?;
+
+    // console_log!("body: {body:?}");
+
+    // let result = Response::from_html("ok");
+    // Ok(result)
 }
 
 fn get_query_param_value(url: &Url, key_name: &str) -> Option<String> {
