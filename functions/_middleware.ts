@@ -2,7 +2,7 @@ interface Env {
   KV: KVNamespace;
 }
 
-const authentication = async (context: any) => {
+const authentication: PagesFunction<Env> = async (context) => {
   const response: Response = await context.next()
   // const value = await context.env.KV.get('example');
   // response.headers.set('x-token', 'god')
