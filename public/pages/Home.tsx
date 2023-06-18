@@ -12,7 +12,13 @@ export function Home() {
           <div class="speaker">
             <img alt="kat" src="./img/kat.png" width="64" height="64" />
             <img alt="duck" src="./img/duck.png" width="16" height="16" />
-            <small class="heart">❤</small>
+            <span>
+              <small>
+                <a class="katopz" href="https://github.com/katopz" target="_blank" rel="noopener">
+                  by <span class="heart">@katopz</span>
+                </a>
+              </small>
+            </span>
           </div>
         </section>
         <br />
@@ -22,11 +28,21 @@ export function Home() {
         <br />
         <hr />
         <section class="footer">
-          <a href="https://github.com/gist-rs">
+          <a href="https://github.com/gist-rs" target="_blank" rel="noopener">
             <img src="./img/github-logo.svg" width="16" height="16" alt="github" />
           </a>
           <a class="sponsor" href="https://patreon.com/gist_rs" target="_blank" rel="noopener">
             <img src="./img/sponsor.svg" width="16" height="16" alt="sponsor" />
+          </a>
+          <a class="katopz" href="mailto:katopz@gist.rs" target="_blank" rel="noopener">
+            <img src="./img/email.svg" width="16" height="16" alt="katopz" />
+          </a>
+        </section>
+        <hr />
+        <section class="sponsors">
+          <small>sponsored by</small>
+          <a href="https://fastly.com" target="_blank" rel="noopener">
+            <img src="./img/fastly-logo.svg" width="32" height="32" alt="fastly" />
           </a>
         </section>
       </div>

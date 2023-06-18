@@ -4,13 +4,12 @@ import { render } from 'preact'
 import { Home } from './pages/Home'
 
 export function Bar() {
-  console.log('bar')
-  // @ts-ignore
-  console.log('window.__STATE__:', window.__STATE__)
   // @ts-ignore
   const cached_data = window.__STATE__ ? window.__STATE__ : {}
-  console.log('cached_data:', cached_data)
   const [data] = useState(cached_data)
+
+  // WIP: Not ready yet
+  return <></>
 
   if (!data?.pubkey) {
     return <></>

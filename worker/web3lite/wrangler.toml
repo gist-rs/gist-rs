@@ -1,6 +1,10 @@
 name = "web3lite" # todo
 main = "build/worker/shim.mjs"
+account_id = "7e11517c4dd4f6e9cede7da9b60d66eb"
 compatibility_date = "2022-01-20"
+kv_namespaces = [
+  { binding = "NFT", id = "35f5f942972c4b5ba8d790f408459425" }
+]
 
 [vars]
 WORKERS_RS_VERSION = "0.0.12"

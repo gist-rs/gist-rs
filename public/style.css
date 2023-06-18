@@ -107,12 +107,37 @@ hr {
   padding-top: 2em;
 }
 
+.sponsors {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  font-size: x-small;
+}
+
+.sponsors small {
+  margin-top: -0.5em;
+}
+
+.sponsors a {
+  padding: 1em;
+}
+
 .footer {
   font-size: xx-small;
 }
 
+.footer a {
+  padding: 1em;
+}
+
 .heart {
   color: crimson;
+}
+
+.katopz {
+  font-size: xx-small;
+  line-height: 3em;
+  text-decoration: none;
 }
 
 a:link {
@@ -137,7 +162,6 @@ a:visited {
 }
 
 .sponsor {
-  padding-left: 1em;
   font-size: 16px;
   text-decoration: none;
 }
