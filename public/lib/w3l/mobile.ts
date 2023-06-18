@@ -21,7 +21,7 @@ export const get_solana_pay_link = (recipient: string, amount?: number, options?
   const searchParams = new URLSearchParams(params_object)
 
   // Special case for 'spl-token'
-  searchParams['spl-token'] = spl_token
+  searchParams.set('spl-token', spl_token)
   const url = new URL(`solana:${recipient}?${searchParams}`)
   return url.toString()
 }
