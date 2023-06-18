@@ -1,19 +1,25 @@
 use std::str::FromStr;
 
 use super::guard::{extract_web3_token, Web3Token};
+use anyhow::bail;
 use reqwest::Url;
 
+use solana_web3_wasm::core::client::ClusterId;
 use solana_web3_wasm::mpl_token_metadata::state::Metadata;
+use solana_web3_wasm::solana_extra_wasm::program::spl_associated_token_account::get_associated_token_address;
 use solana_web3_wasm::{info::nft::NftInformation, solana_sdk::pubkey::Pubkey};
 use worker::{console_log, Error, Request, Response, Result, RouteContext};
 
 pub async fn handle_nft_req(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     let web3_token_result = extract_web3_token(&req);
+    console_log!("web3_token_result: {web3_token_result:?}");
 
-    match web3_token_result {
-        Ok(web3_token) => handle_nft_web3_token(&req, &ctx, web3_token).await,
-        Err(err) => Response::error(format!("${err}"), 403),
-    }
+    Response::ok("TODO")
+
+    // match web3_token_result {
+    //     Ok(web3_token) => handle_nft_web3_token(&req, &ctx, web3_token).await,
+    //     Err(err) => Response::error(format!("${err}"), 403),
+    // }
 }
 
 async fn fetch(url: String) -> anyhow::Result<Result<Response>> {
@@ -60,66 +66,93 @@ async fn get_kv_text(ctx: &RouteContext<()>, namespace: &str, key_name: &str) ->
 }
 
 async fn get_user_nft_metadata(
-    cluster_str: &str,
-    wallet_address: &str,
-    mint_address: &str,
+    cluster_id: &ClusterId,
+    wallet_pubkey: &Pubkey,
+    mint_pubkey: &Pubkey,
 ) -> anyhow::Result<Metadata> {
-    let nft_information = NftInformation::new_from_str(cluster_str).expect("expect valid cluster");
-    let wallet_pubkey = Pubkey::from_str(wallet_address)?;
-    let mint_pubkey = Pubkey::from_str(mint_address)?;
+    println!("get_user_nft_metadata: {wallet_pubkey:?}");
+    let nft_information = NftInformation::new_from_str(cluster_id.to_string().as_str())
+        .expect("expect valid cluster");
+
+    println!("find_nfts_by_mints: {mint_pubkey:?}");
     let mut nfts = nft_information
-        .find_nfts_by_mints(&wallet_pubkey, &[mint_pubkey])
+        .find_nfts_by_mints(wallet_pubkey, &[*mint_pubkey])
         .await?;
 
-    let metadata = nfts.remove(mint_address).expect("expect metadata");
+    let metadata = nfts
+        .remove(&mint_pubkey.to_string())
+        .expect("expect metadata");
 
     Ok(metadata)
 }
 
-pub async fn handle_nft_web3_token(
-    req: &Request,
-    ctx: &RouteContext<()>,
-    web3_token: Web3Token,
-) -> Result<Response> {
-    let maybe_mint_address = ctx.param("address");
-    let url = req.url().expect("ERROR: expect url");
-    let chain = get_query_param_value(&url, "chain").unwrap_or("solana".to_owned());
-    let cluster = get_query_param_value(&url, "cluster").unwrap_or("mainnet".to_owned());
-
-    console_log!("handle_nft_web3_token: {chain:?}, {cluster:?}");
-
-    let response = match maybe_mint_address {
-        Some(mint_address) => {
-            // 1. TODO: Validate web token
-            let wallet_address = web3_token.wallet_address;
-
-            // 2. Get NFT for user if has
-            let nft_metadata =
-                match get_user_nft_metadata(&cluster, &wallet_address, mint_address).await {
-                    Ok(metadata) => metadata,
-                    Err(error) => return Response::error(error.to_string(), 403),
-                };
-
-            console_log!("nft_metadata:{nft_metadata:#?}");
-
-            // 3. Get KV
-            let value: Option<String> = get_kv_text(ctx, "NFT", mint_address).await;
-
-            let url = match value {
-                Some(value) => value,
-                None => return Err(Error::from("ERROR: expect value.")),
-            };
-
-            url
-
-            // 2. Fetch content from url
-            // match fetch(url).await {
-            //     Ok(result) => result,
-            //     Err(error) => return Err(Error::from(error.to_string())),
-            // }
-        }
-        None => return Response::error("ERROR: expect address", 403),
+pub async fn get_user_nft_metadata_from_url(
+    url: &Url,
+    mint_pubkey: &Pubkey,
+    web3_token: &Web3Token,
+) -> anyhow::Result<Metadata> {
+    let maybe_cluster_str = get_query_param_value(url, "cluster");
+    let cluster_id = match maybe_cluster_str {
+        Some(cluster_str) => match cluster_str.as_str() {
+            "devnet" => ClusterId::Devnet,
+            _ => ClusterId::Mainnet,
+        },
+        None => ClusterId::Mainnet,
     };
 
-    Response::ok(response)
+    println!("handle_nft_web3_token: {cluster_id:?}");
+
+    // test
+    // let address = get_associated_token_address(mint_pubkey, mint_pubkey);
+    // println!("address: {cluster_id:?}");
+
+    // 1. TODO: Validate web token
+    let wallet_pubkey = Pubkey::from_str(&web3_token.wallet_address)?;
+
+    // 2. Get NFT for user if has
+    let nft_metadata = match get_user_nft_metadata(&cluster_id, &wallet_pubkey, mint_pubkey).await {
+        Ok(metadata) => metadata,
+        Err(_) => bail!("NFT not found."),
+    };
+
+    println!("nft_metadata:{nft_metadata:#?}");
+
+    Ok(nft_metadata)
+
+    // // 3. Get KV
+    // let value: Option<String> = get_kv_text(ctx, "NFT", &mint_address).await;
+
+    // let url = match value {
+    //     Some(value) => value,
+    //     None => return Err(Error::from("ERROR: expect value.")),
+    // };
+
+    // url
+
+    // 2. Fetch content from url
+    // match fetch(url).await {
+    //     Ok(result) => result,
+    //     Err(error) => return Err(Error::from(error.to_string())),
+    // }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use urlencoding::decode;
+
+    #[tokio::test]
+    async fn test_get_user_nft_metadata_from_url() {
+        let url = Url::from_str("https://gist.rs/nft/2jxpnS9jy9RmYsopuXXeMQP8Av81JtSSTMjz4Qnb9acr?cluser=devnet")
+            .unwrap();
+
+        let cookie_str = decode("cat9ZgXRQA3yCRCNaFyswDqZhQuDsJEvVnfzWfdWNdX%7C67qiYTcmK7deQ2Y4MTc31X6gwxM1w5HzufyH2KvZ3DTjXibwNyHgQi8m2ZAVxx2ios15c8Zq13dNrSZ1qcFQ2GsPpZCmkAKuW3VPSdxSDcw38XS6YD5ve2FqNxTHXRrpwTApWXP8vXjpvCSMBughKpz6JsZPKH127yXXdduF9ADurL29G3xwmrKdA92qbeYdBQFBa24jE31XvfiQmN2ScYubcrAx%7C%7B%22app_url%22%3A%22https%3A%2F%2Fgist.rs%22%2C%22timestamp%22%3A1670600698494%2C%22chain%22%3A%22solana%22%2C%22cluster%22%3A%22mainnet-beta%22%7D").unwrap();
+        let web3_token = Web3Token::from_str(&cookie_str).unwrap();
+        let mint_pubkey = Pubkey::from_str("2jxpnS9jy9RmYsopuXXeMQP8Av81JtSSTMjz4Qnb9acr").unwrap();
+
+        let url = get_user_nft_metadata_from_url(&url, &mint_pubkey, &web3_token)
+            .await
+            .unwrap();
+        dbg!(url);
+    }
 }

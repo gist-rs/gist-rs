@@ -28,6 +28,8 @@ reqwest = { version = "0.11" , features = ["json"] }
 
 getrandom = { version = "0.2", features = ["js"] }
 solana-web3-wasm = { git = "https://github.com/avareum/solana-web3-wasm", rev="ccc147a", features = ["nft"]}
+thiserror = "1.0.38"
+urlencoding = "2.1.2"
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3.33"

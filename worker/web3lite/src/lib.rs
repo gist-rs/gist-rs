@@ -1,4 +1,4 @@
-use handlers::{nft::handle_nft_req, transfer::handle_transfer_req};
+use handlers::{nft::handle_nft_req, proxy::handle_proxy_req, transfer::handle_transfer_req};
 use worker::*;
 
 mod handlers;
@@ -36,15 +36,8 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .get_async("/nft/:address", |req, ctx| async move {
             handle_nft_req(req, ctx).await
         })
-        .get_async("/hello/:test", |_, _| async move {
-            let body = reqwest::get("https://developers.cloudflare.com/")
-                .await
-                .unwrap()
-                .text()
-                .await
-                .unwrap();
-
-            Response::ok(body)
+        .get_async("/proxy/:url", |req, ctx| async move {
+            handle_proxy_req(req, ctx).await
         })
         .run(req, env)
         .await
