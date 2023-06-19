@@ -1,5 +1,5 @@
 export async function onRequest(context) {
-  let response: Response = await context.env.SERVICE.fetch(context.request, context);
+  let response: Response = await context.env.DIFF.fetch(context.request, context);
   if (!response.ok) {
     return new Response("403")
   }

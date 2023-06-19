@@ -1,3 +1,3 @@
 export function onRequest(context) {
-  return context.env.SERVICE.fetch(context.request, context);
+  return context.env.DIFF.fetch(context.request, context);
 }

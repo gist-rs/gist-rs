@@ -14,7 +14,7 @@ yarn build
 yarn serve
 ```
 
-## Todo
+## IDEA
 
 - User can mint 32x32 to 16x16 (=256) `NFT` from browser via `sugar` wasm.
   - Create `AOT` from seed `pixpix` for user `wallet_address`.
