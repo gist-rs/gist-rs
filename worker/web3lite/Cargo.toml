@@ -1,7 +1,10 @@
 [package]
-name = "web3lite"
+name = "solana-cf"
 version = "0.1.0"
 edition = "2018"
+description = "Solana on Cloudflare Worker."
+license = "MIT"
+repository = "https://github.com/gist-rs/gist-rs"
 
 [lib]
 crate-type = ["cdylib", "rlib"]

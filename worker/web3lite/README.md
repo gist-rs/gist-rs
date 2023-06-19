@@ -1,9 +1,10 @@
 ## TODO
 
-- [ ] build transfer transaction.
+- [ ] solana pay `findReference`.
 
 ## Dev
 
 ```
+npx wrangler dev
 npx wrangler deploy
 ```

@@ -1,14 +1,6 @@
-name = "web3lite" # todo
+name = "solana-cf"
 main = "build/worker/shim.mjs"
-account_id = "7e11517c4dd4f6e9cede7da9b60d66eb"
-compatibility_date = "2022-01-20"
-kv_namespaces = [
-  { binding = "NFT", id = "35f5f942972c4b5ba8d790f408459425" }
-]
-
-[vars]
-WORKERS_RS_VERSION = "0.0.12"
-PHANTOM_ENCRYPTION_PUBLIC_KEY = "Bigf1Q8vseNX5TAGZpKkuoC51HMMmhZZCWrVBwy7R8kP"
+compatibility_date = "2023-04-19"
 
 [build]
-command = "cargo install -q worker-build --version ^0.0.8 && worker-build --release"
+command = "cargo install worker-build && worker-build --release"
