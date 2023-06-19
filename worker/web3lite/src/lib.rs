@@ -39,6 +39,8 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .get_async("/proxy/:url", |req, ctx| async move {
             handle_proxy_req(req, ctx).await
         })
+        .get("/hello", |_, _| Response::ok("Hello from Workers!"))
+        .get("/", |_, _| Response::ok("Hi from Workers!"))
         .run(req, env)
         .await
 }
