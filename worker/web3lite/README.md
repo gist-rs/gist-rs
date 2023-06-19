@@ -5,5 +5,5 @@
 ## Dev
 
 ```
-npx wrangler publish
+npx wrangler deploy
 ```

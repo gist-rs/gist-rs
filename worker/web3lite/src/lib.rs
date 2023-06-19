@@ -1,4 +1,4 @@
-use handlers::{nft::handle_nft_req, proxy::handle_proxy_req, transfer::handle_transfer_req};
+use handlers::{nft::handle_nft_req, proxy::handle_proxy_req, transfer::handle_pay_req};
 use worker::*;
 
 mod handlers;
@@ -30,8 +30,8 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     // functionality and a `RouteContext` which you can use to  and get route parameters and
     // Environment bindings like KV Stores, Durable Objects, Secrets, and Variables.
     router
-        .get_async("/transfer/:command", |req, ctx| async move {
-            handle_transfer_req(req, ctx).await
+        .get_async("/pay/:command", |req, ctx| async move {
+            handle_pay_req(req, ctx).await
         })
         .get_async("/nft/:address", |req, ctx| async move {
             handle_nft_req(req, ctx).await

@@ -11,4 +11,4 @@ WORKERS_RS_VERSION = "0.0.12"
 PHANTOM_ENCRYPTION_PUBLIC_KEY = "Bigf1Q8vseNX5TAGZpKkuoC51HMMmhZZCWrVBwy7R8kP"
 
 [build]
-command = "cargo install -q worker-build && worker-build --release"
+command = "cargo install -q worker-build --version ^0.0.8 && worker-build --release"

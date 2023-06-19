@@ -16,27 +16,28 @@ default = ["console_error_panic_hook"]
 # code size when deploying.
 console_error_panic_hook = { version = "0.1.7", optional = true }
 cfg-if = "1.0.0"
-worker = "0.0.12"
+worker = "0.0.17"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = { version ="1.0", default-features = false }
 
-cookie = { version = "0.16.1", features = ["percent-encode"] }
+cookie = { version = "0.17", features = ["percent-encode"] }
 nacl = "0.5.3"
-bs58 = "0.4.0"
-anyhow = "1.0.68"
+bs58 = "0.5.0"
+anyhow = "1.0.71"
 reqwest = { version = "0.11" , features = ["json"] }
 
 getrandom = { version = "0.2", features = ["js"] }
 solana-web3-wasm = { git = "https://github.com/avareum/solana-web3-wasm", rev="ccc147a", features = ["nft"]}
-thiserror = "1.0.38"
+thiserror = "1.0"
 urlencoding = "2.1.2"
+serde_qs = "0.12.0"
 
 [dev-dependencies]
-wasm-bindgen-test = "0.3.33"
-dotenv = "0.15.0"
+wasm-bindgen-test = "0.3"
+dotenv = "0.15"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dev-dependencies]
-tokio = { version = "1.21.1", features = ["full"] }
+tokio = { version = "1.28.2", features = ["full"] }
 
 [profile.release]
 opt-level = "z"  # Optimize for size.
