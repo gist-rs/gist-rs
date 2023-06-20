@@ -1,5 +1,6 @@
 pub mod guard;
 pub mod memo;
 pub mod nft;
+pub mod pay;
 pub mod proxy;
-pub mod transfer;
+pub mod qr;

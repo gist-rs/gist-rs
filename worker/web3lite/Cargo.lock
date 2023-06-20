@@ -2086,6 +2086,7 @@ dependencies = [
  "dotenv",
  "getrandom 0.2.10",
  "nacl",
+ "percent-encoding",
  "reqwest",
  "serde",
  "serde_json",

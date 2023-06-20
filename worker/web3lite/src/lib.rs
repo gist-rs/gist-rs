@@ -1,4 +1,4 @@
-use handlers::{nft::handle_nft_req, proxy::handle_proxy_req, transfer::handle_pay_req};
+use handlers::{nft::handle_nft_req, pay::handle_pay_req, proxy::handle_proxy_req};
 use worker::*;
 
 mod handlers;
