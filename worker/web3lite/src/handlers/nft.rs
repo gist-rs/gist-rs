@@ -6,11 +6,10 @@ use reqwest::Url;
 
 use solana_web3_wasm::core::client::ClusterId;
 use solana_web3_wasm::mpl_token_metadata::state::Metadata;
-use solana_web3_wasm::solana_extra_wasm::program::spl_associated_token_account::get_associated_token_address;
 use solana_web3_wasm::{info::nft::NftInformation, solana_sdk::pubkey::Pubkey};
-use worker::{console_log, Error, Request, Response, Result, RouteContext};
+use worker::{console_log, Request, Response, Result, RouteContext};
 
-pub async fn handle_nft_req(req: Request, ctx: RouteContext<()>) -> Result<Response> {
+pub async fn handle_nft_req(req: Request, _ctx: RouteContext<()>) -> Result<Response> {
     let web3_token_result = extract_web3_token(&req);
     console_log!("web3_token_result: {web3_token_result:?}");
 
@@ -22,6 +21,7 @@ pub async fn handle_nft_req(req: Request, ctx: RouteContext<()>) -> Result<Respo
     // }
 }
 
+#[allow(dead_code)]
 async fn fetch(url: String) -> anyhow::Result<Result<Response>> {
     console_log!("url: {url:?}");
 
@@ -41,6 +41,7 @@ async fn fetch(url: String) -> anyhow::Result<Result<Response>> {
     // Ok(result)
 }
 
+#[allow(dead_code)]
 fn get_query_param_value(url: &Url, key_name: &str) -> Option<String> {
     let query_params = url
         .query_pairs()
@@ -53,6 +54,7 @@ fn get_query_param_value(url: &Url, key_name: &str) -> Option<String> {
         .map(|x| x.1.to_string())
 }
 
+#[allow(dead_code)]
 async fn get_kv_text(ctx: &RouteContext<()>, namespace: &str, key_name: &str) -> Option<String> {
     // Some("https://arweave.net/y5e5DJsiwH0s_ayfMwYk-SnrZtVZzHLQDSTZ5dNRUHA".to_owned())
     let kv = ctx.kv(namespace);
@@ -65,6 +67,7 @@ async fn get_kv_text(ctx: &RouteContext<()>, namespace: &str, key_name: &str) ->
     }
 }
 
+#[allow(dead_code)]
 async fn get_user_nft_metadata(
     cluster_id: &ClusterId,
     wallet_pubkey: &Pubkey,
@@ -86,6 +89,7 @@ async fn get_user_nft_metadata(
     Ok(metadata)
 }
 
+#[allow(dead_code)]
 pub async fn get_user_nft_metadata_from_url(
     url: &Url,
     mint_pubkey: &Pubkey,
@@ -143,8 +147,10 @@ mod test {
 
     #[tokio::test]
     async fn test_get_user_nft_metadata_from_url() {
-        let url = Url::from_str("https://gist.rs/nft/2jxpnS9jy9RmYsopuXXeMQP8Av81JtSSTMjz4Qnb9acr?cluser=devnet")
-            .unwrap();
+        let url = Url::from_str(
+            "https://gist.rs/nft/2jxpnS9jy9RmYsopuXXeMQP8Av81JtSSTMjz4Qnb9acr?cluser=devnet",
+        )
+        .unwrap();
 
         let cookie_str = decode("cat9ZgXRQA3yCRCNaFyswDqZhQuDsJEvVnfzWfdWNdX%7C67qiYTcmK7deQ2Y4MTc31X6gwxM1w5HzufyH2KvZ3DTjXibwNyHgQi8m2ZAVxx2ios15c8Zq13dNrSZ1qcFQ2GsPpZCmkAKuW3VPSdxSDcw38XS6YD5ve2FqNxTHXRrpwTApWXP8vXjpvCSMBughKpz6JsZPKH127yXXdduF9ADurL29G3xwmrKdA92qbeYdBQFBa24jE31XvfiQmN2ScYubcrAx%7C%7B%22app_url%22%3A%22https%3A%2F%2Fgist.rs%22%2C%22timestamp%22%3A1670600698494%2C%22chain%22%3A%22solana%22%2C%22cluster%22%3A%22mainnet-beta%22%7D").unwrap();
         let web3_token = Web3Token::from_str(&cookie_str).unwrap();

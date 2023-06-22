@@ -2,8 +2,9 @@ use std::str::FromStr;
 
 use serde::{Deserialize, Serialize};
 use serde_qs;
-use solana_web3_wasm::solana_sdk::pubkey::Pubkey;
 use worker::{Request, Response, Result, RouteContext, Url};
+
+use crate::handlers::memo::get_reference_pubkey_from_receipt;
 
 use super::qr::get_qr_url;
 
@@ -76,11 +77,16 @@ pub async fn handle_pay_req(req: Request, _ctx: RouteContext<()>) -> Result<Resp
         Err(_) => return Response::error("Expected valid query result".to_string(), 401),
     };
 
-    // TODO: use file_hash as reference
-    // TODO: use server_id as memo
+    println!("{pay_query_params:?}");
+    let reference = match pay_query_params.reference {
+        Some(reference) => reference,
+        None => return Response::error("Expected pay_query_params.reference".to_string(), 401),
+    };
+    let reference_pubkey_from_receipt =
+        get_reference_pubkey_from_receipt(&pay_command.recipient, &reference);
 
-    // TODO: watch for 30secs
-    // TODO: get_signatures_for_address
+    // TODO: add to watch queue
+    println!("{reference_pubkey_from_receipt:?}");
 
     let chain_type = pay_command.chain_type;
     let recipient = pay_command.recipient;
