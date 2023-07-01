@@ -1,30 +1,26 @@
-use anyhow::bail;
 use solana_web3_wasm::{
     solana_client_wasm::WasmClient,
-    solana_extra_wasm::{
-        program::{
-            spl_associated_token_account::{
-                get_associated_token_address_with_program_id,
-                instruction::create_associated_token_account,
-                instruction::create_associated_token_account_idempotent,
-            },
-            spl_memo, spl_token,
-            spl_token_2022::{
-                self,
-                extension::{
-                    default_account_state, interest_bearing_mint, memo_transfer, transfer_fee,
-                    ExtensionType, StateWithExtensionsOwned,
-                },
-                instruction,
-                state::{Account, AccountState, Mint, Multisig},
-            },
+    solana_extra_wasm::program::{
+        spl_associated_token_account::{
+            get_associated_token_address_with_program_id,
+            instruction::create_associated_token_account,
+            instruction::create_associated_token_account_idempotent,
         },
-        utils::sleep,
+        spl_memo, spl_token,
+        spl_token_2022::{
+            self,
+            extension::{
+                default_account_state, interest_bearing_mint, memo_transfer, transfer_fee,
+                ExtensionType, StateWithExtensionsOwned,
+            },
+            instruction,
+            state::{Account, AccountState, Mint, Multisig},
+        },
     },
     solana_sdk::{
         account::Account as BaseAccount,
         hash::Hash,
-        instruction::{AccountMeta, Instruction},
+        instruction::Instruction,
         message::Message,
         program_error::ProgramError,
         program_pack::Pack,
@@ -36,11 +32,7 @@ use solana_web3_wasm::{
 };
 
 use {
-    std::{
-        fmt, io,
-        sync::{Arc, RwLock},
-        time::{Duration, Instant},
-    },
+    std::sync::{Arc, RwLock},
     thiserror::Error,
 };
 
