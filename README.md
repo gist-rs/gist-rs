@@ -1,17 +1,13 @@
 # gist-rs
 
-## Env
-
-```
-PHANTOM_ENCRYPTION_SECRET_KEY=
-```
-
 ## Dev
 
 ```
+# WMR
 yarn start
-yarn build
-yarn serve
+
+# Page
+yarn dev-pages
 ```
 
 ## IDEA

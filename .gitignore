@@ -4,4 +4,5 @@ dist
 stats.html
 
 env.*
-.dev.*
+.dev.vars
+.env

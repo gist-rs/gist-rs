@@ -5,9 +5,14 @@ npx wrangler dev
 npx wrangler deploy
 ```
 
+## Note
+
+- `http://127.0.0.1:8787/pay/solana:mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN?amount=0.01&spl-token=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v`
+
 ## TODO
 
-- [ ] Mint `TEST` token on `devnet`.
+- [ ] Login with Google.
+- [x] Mint `TEST` token on `devnet`.
 - [ ] Mint `YUZU` token on `mainnet`.
 - [ ] Create derived account for each user.
 - [ ] Test payment flow.

@@ -7,23 +7,27 @@
 		"dev": "nodemon --ignore dist --exec yarn build",
 		"kill": "kill $(lsof -i tcp:8788) &> /dev/null || true",
 		"dev-pages": "yarn kill && npx wrangler pages dev dist --local --compatibility-date=2022-12-09",
-		"publish": "npx wrangler pages publish ."
+		"deploy": "npx wrangler pages deploy ."
 	},
 	"eslintConfig": {
 		"extends": "preact"
 	},
 	"dependencies": {
+		"@tsndr/cloudflare-worker-jwt": "^2.2.1",
 		"bs58": "^5.0.0",
 		"cookie": "^0.5.0",
 		"is-mobile": "^3.1.1",
 		"preact": "^10.11.3",
 		"preact-iso": "^2.3.1",
 		"preact-router": "^4.1.0",
-		"tweetnacl": "^1.0.3"
+		"query-string": "^8.1.0",
+		"tweetnacl": "^1.0.3",
+		"worker-auth-providers": "^0.0.10-beta15"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20221111.1",
 		"@types/bs58": "^4.0.1",
+		"@types/node": "^20.3.3",
 		"nodemon": "^2.0.20",
 		"typescript": "^4.9.4",
 		"wmr": "^3.8.0"

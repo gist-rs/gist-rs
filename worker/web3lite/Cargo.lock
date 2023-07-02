@@ -2377,7 +2377,6 @@ dependencies = [
 [[package]]
 name = "solana-web3-wasm"
 version = "0.11.0"
-source = "git+https://github.com/avareum/solana-web3-wasm?rev=eb7af7c#eb7af7c7f5adf2197136ec62e8f02488030ed90c"
 dependencies = [
  "anyhow",
  "async-trait",
