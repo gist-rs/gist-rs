@@ -1,6 +1,6 @@
 import jwt from '@tsndr/cloudflare-worker-jwt';
-import { google } from "worker-auth-providers";
 import { COOKIES_GOOGLE_KEY_NAME, get_cookies_domain_from_hostname, get_serialized_cookie } from '../cookies';
+import { google } from '../../lib/cf-auth';
 
 function generateJWT(user: any, secret: string) {
   const claims: any = {
