@@ -1,4 +1,4 @@
-import queryString from "query-string";
+import * as queryString from "query-string";
 
 export function onRequest(context) {
   const redirectUrl = context.env.GOOGLE_REDIRECT_DEV_URL || context.env.GOOGLE_REDIRECT_PROD_URL;
