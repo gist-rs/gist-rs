@@ -45,8 +45,12 @@ export const onRequest = async (context) => {
 
     let { origin, hostname } = new URL(request.url);
     const response = Response.redirect(`${origin}`, 301);
+
+    // Clone the response so that it's no longer immutable
+    const newResponse = new Response(response.body, response);
+
     const serialized_cookie = get_serialized_cookie(COOKIES_GOOGLE_KEY_NAME, jwt, { domain: get_cookies_domain_from_hostname(hostname) });
-    response.headers.set('Set-Cookie', serialized_cookie);
+    newResponse.headers.set('Set-Cookie', serialized_cookie);
 
     // 2. Init user
     // 2.1 Gen and connect email to wallet.
@@ -55,7 +59,7 @@ export const onRequest = async (context) => {
     // 2.2 Save to KV.
     // await createUser(providerUser);
 
-    return response
+    return newResponse
   } catch (e) {
     console.log("[error]", e?.stack);
     return new Response(JSON.stringify(e));
