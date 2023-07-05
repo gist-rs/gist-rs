@@ -4,7 +4,7 @@
 		"start": "wmr",
 		"build": "wmr build --prerender",
 		"serve": "wmr serve",
-		"dev": "npx nodemon --ignore dist --exec yarn build",
+		"dev": "npx nodemon -e ts,tsx -w ./ --ignore dist --exec yarn build",
 		"kill": "kill $(lsof -i tcp:8788) &> /dev/null || true",
 		"dev-pages": "yarn kill && npx wrangler pages dev dist --local --compatibility-date=2022-12-09",
 		"deploy": "npx wrangler pages deploy ."
@@ -13,6 +13,7 @@
 		"extends": "preact"
 	},
 	"dependencies": {
+		"@preact/signals": "^1.1.4",
 		"@tsndr/cloudflare-worker-jwt": "^2.2.1",
 		"bs58": "^5.0.0",
 		"cookie": "^0.5.0",

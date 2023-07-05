@@ -72,9 +72,8 @@ body {
 
 .button:active {
   box-shadow: none !important;
-  position: relative;
   top: 3px;
-  transition: all 200ms ease-out;
+  transition: all 100ms ease-out;
 }
 
 hr {
@@ -164,4 +163,107 @@ a:visited {
 .sponsor {
   font-size: 16px;
   text-decoration: none;
+}
+
+.clickable {
+  cursor: pointer;
+  user-select: none;
+  -webkit-touch-callout: none;
+
+  position: relative;
+  min-width: fit-content;
+  min-height: fit-content;
+  line-height: 1em;
+  display: inline-block;
+  text-decoration: none;
+  border-radius: 0.6em;
+  text-align: center;
+
+  margin: 0.25em;
+
+  outline: none;
+  transition: all 200ms ease-out;
+}
+
+.seat {
+  /* box-shadow: 0px 4px 0px #aa0033;
+  top: 0px;
+
+  color: cornsilk;
+  border: #ee3388;
+  background: radial-gradient(#ee0088, #cc0066); */
+
+  font-weight: 500;
+  font-size: 1.25em;
+
+  width: 160px;
+  height: 90px;
+}
+
+.seat small {
+  font-size: small;
+}
+
+.seat hr {
+  width: 80%;
+  margin: auto;
+  padding: 0;
+  margin-top: 0.3em;
+  margin-bottom: 0.1em;
+}
+
+.seat:active {
+  box-shadow: none !important;
+  top: 3px;
+}
+
+.seat-available {
+  box-shadow: none !important;
+  top: 3px;
+
+  color: rgb(0, 0, 0, 0.75);
+  border: cornsilk;
+  background: transparent;
+
+  border-style: dashed;
+  border-width: 1px;
+}
+
+.seat-reserve {
+  box-shadow: 0px 4px 0px #aa0033;
+  top: 0px;
+
+  color: cornsilk;
+  border: #ee3388;
+  background: radial-gradient(#ee0088, #cc0066);
+
+  font-weight: 500;
+  font-size: 1.25em;
+
+  width: 160px;
+  height: 90px;
+}
+
+.seat-reserved {
+  box-shadow: none !important;
+  top: 3px;
+
+  color: rgb(255, 255, 255, 0.5);
+  border: #000000;
+  background: rgb(0, 0, 0, 0.75);
+
+  border-style: dashed;
+  border-width: 1px;
+}
+
+.seat-using {
+  box-shadow: 0px 4px 0px #aa0033;
+  top: 0px;
+
+  color: cornsilk;
+  border: #000000;
+
+  background: linear-gradient(-45deg, #ee7752, #e7833c, #d5cf23, #61d523);
+  background-size: 400% 400%;
+  animation: gradient 5s ease infinite;
 }

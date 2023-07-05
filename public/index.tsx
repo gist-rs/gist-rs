@@ -11,34 +11,36 @@ export function Bar() {
   // WIP: Not ready yet
   return <></>
 
-  if (!data?.pubkey) {
-    return <></>
-  }
+  // if (!data?.pubkey) {
+  //   return <></>
+  // }
 
-  return (
-    <div>
-      <button>{data.pubkey}</button>
-    </div>
-  )
+  // return (
+  //   <div>
+  //     <button>{data.pubkey}</button>
+  //   </div>
+  // )
 }
 
-const Sponsor = lazy(() => import('./pages/Sponsor.js'))
-const Auth = lazy(() => import('./pages/Auth.js'))
+// const Sponsor = lazy(() => import('./pages/Sponsor.js'))
+// const Auth = lazy(() => import('./pages/Auth.js'))
+const Diff = lazy(() => import('./pages/Diff.js'))
 
 export function App() {
-  useEffect(() => {
-    // TODO: https://gist.github.com/developit/f4c67a2ede71dc2fab7f357f39cff28c
-    let bar = document.getElementById('bar')
-    bar && render(<Bar />, bar, bar)
-  }, [])
+  // useEffect(() => {
+  //   // TODO: https://gist.github.com/developit/f4c67a2ede71dc2fab7f357f39cff28c
+  //   let bar = document.getElementById('bar')
+  //   bar && render(<Bar />, bar, bar)
+  // }, [])
 
   return (
     <LocationProvider>
       <ErrorBoundary>
         <Router>
           <Home path="/" />
-          <Auth path="/auth/:provider" />
-          <Sponsor path="/sponsor" />
+          {/* <Auth path="/auth/:provider" /> */}
+          {/* <Sponsor path="/sponsor" /> */}
+          <Diff path="/diff" />
         </Router>
       </ErrorBoundary>
     </LocationProvider>

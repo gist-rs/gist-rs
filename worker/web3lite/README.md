@@ -161,8 +161,9 @@ npx wrangler deploy
     "id": "2023-06-01::01::miner_WalletAddReSs",
     "user_wallet_address": undefined,
     "miner_wallet_address": "miner_WalletAddReSs",
-    "time_start": "2023-06-01:0Z",
-    "time_end": "2023-06-20T17T10:0Z",
+    "hour": 0,
+    "time_start": "2023-07-05T00:15:24.871Z",
+    "time_end": "2023-07-05T01:00:0.0Z",
     "status": "AVAILABLE", // AVAILABLE, RESERVED, USING, USED, RATED, DONE, MAINTENANCE, BANNED, RESELL
     "user_bided": undefined,
     "transaction_id": undefined,
@@ -177,6 +178,8 @@ npx wrangler deploy
     "user_wallet_address": "user_waLLetAddreSs",
     "user_bided": 1.5,
     "status": "RESERVED",
+    "time_start": "2023-07-05T00:15:24.871Z",
+    "time_end": "2023-07-05T01:00:0.0Z",
     "transaction_id": "transaction_id",
   },
   "2023-06-01::03::miner_WalletAddReSs": {
