@@ -47,7 +47,7 @@ const Seat: FunctionComponent<Props> = (props: Props) => {
 
   return (
     <button disabled={status === SeatStatus.RESERVED} class={get_button_class_by_status(status)} onMouseDown={() => handleSeatMouseDown(seat_id)} onMouseUp={() => handleSeatMouseUp(seat_id)} onMouseEnter={() => handleSeatMouseEnter(seat_id)}>
-      {hour.toString().padStart(2, '0') + ':00-' + hour.toString().padStart(2, '0') + ':59'}
+      {hour.toString().padStart(2, '0') + ':00 ➜ ' + hour.toString().padStart(2, '0') + ':59'}
       <hr />
 
       <small>{offered_price} 🍋</small>
@@ -63,9 +63,12 @@ const DEFAULT_SEAT = {
 
 // TODO: Call read api reservations
 const price_impact = 0.5
-const today_iso = new Date().toISOString()
+const date = new Date()
+const today_iso = date.toISOString()
 const today_dates = today_iso.split('T')
 const today_date = today_dates[0]
+const current_hour = date.getHours()
+
 const reservations = Array(24)
   .fill(DEFAULT_SEAT)
   .map((e, i) => ({
@@ -75,6 +78,11 @@ const reservations = Array(24)
     hour: i,
     offered_price: parseFloat((e.base_price + price_impact * Math.sin((Math.PI * i) / 24)).toFixed(2))
   }))
+
+// Already expired?
+reservations.forEach((e) => {
+  e.status = e.hour <= current_hour ? SeatStatus.USED : e.status
+})
 
 // mock reserved
 reservations[0].status = SeatStatus.RESERVED
@@ -110,8 +118,10 @@ const Diff = () => {
   }
 
   let total_price = 0
+
   const computed_reserves = reservations.map((e) => {
     const computed_reserve = { ...e }
+    // Reserve?
     computed_reserve.status = reserves.value.includes(e.id) ? SeatStatus.RESERVE : e.status
 
     // Calculate total price at client.

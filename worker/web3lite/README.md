@@ -12,9 +12,9 @@ npx wrangler deploy
 ## TODO
 
 - [x] Login with Google.
-- [ ] POC access as reserved. // https://github.com/cloudflare/workers-access-external-auth-example/blob/main/index.js
 - [ ] Create reservation page. // weekly
 - [ ] Create reservation after deduct gem.
+- [ ] POC access as reserved. // https://github.com/cloudflare/workers-access-external-auth-example/blob/main/index.js
 - [ ] Schedule trigger every end of each hour + 1min to consolidate contract(pay to miner, proceed next hour reservation).
 - [ ] Crate prompt pay QR code.
 - [ ] Test offchain payment flow from google form.

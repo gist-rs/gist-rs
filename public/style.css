@@ -240,14 +240,11 @@ a:visited {
 .seat-reserved {
   box-shadow: none !important;
   top: 3px;
-
   border: white;
-  /* background: radial-gradient(#333333, #666666); */
-
   border-style: solid;
   border-width: 1px;
   cursor: no-drop;
-  opacity: 0.25;
+  opacity: 0.5;
   color: white;
 }
 
@@ -263,6 +260,18 @@ a:visited {
   animation: gradient 5s ease infinite;
 }
 
+.seat-used {
+  box-shadow: none !important;
+  top: 3px;
+  border: white;
+  border-style: solid;
+  border-width: 1px;
+  cursor: no-drop;
+  opacity: 0.5;
+  color: white;
+  background: rgb(0, 0, 0, 0.5);
+}
+
 /* slide button */
 .drag-area {
   position: relative;
@@ -276,9 +285,10 @@ a:visited {
   vertical-align: middle;
   line-height: 3em;
 
-  box-shadow: 0px -2px 0px #00000066;
+  box-shadow: -3px -3px 3px #00000033;
   color: cornsilk;
-  border: #000000;
+  border: white;
+  border-style: solid;
 
   margin-top: 2em;
 }
@@ -318,6 +328,7 @@ a:visited {
   cursor: grab;
   user-select: none;
   -webkit-touch-callout: none;
+  outline: none;
 
   font-weight: 600;
   font-size: large;
