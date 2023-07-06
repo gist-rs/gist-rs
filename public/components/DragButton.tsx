@@ -45,12 +45,12 @@ const DragButton: FunctionComponent<Props> = ({ id, label, children, onDragSucce
     if (!el) return
 
     const percent = (el.getBoundingClientRect().left - button_parent_left - 4) / 152
+
     if (percent > 0.9) {
+      el.style.left = `152px`
       setIsDragSucceed(true)
     } else {
-      const el = buttonRef.current
       el.style.left = `1px`
-
       setIsDragSucceed(false)
     }
   }
@@ -63,7 +63,7 @@ const DragButton: FunctionComponent<Props> = ({ id, label, children, onDragSucce
   return (
     <div class="drag-area" onMouseUp={remove}>
       <div class="drag-area-panel">
-        <span class="drag-area-label">{percent < 0.9 ? 'KEEP SLIDING...' : 'RELEASE TO PAY!'}</span>
+        <span class="drag-area-label">{percent < 0.9 ? 'KEEP SLIDING ... ' : 'RELEASE TO PAY!'}</span>
         <span class="drag-area-label" style={{ marginLeft: '1em' }}>
           {' '}
           ➜{' '}

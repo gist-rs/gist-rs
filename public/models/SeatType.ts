@@ -1,0 +1,10 @@
+export enum SeatStatus {
+  AVAILABLE = 'AVAILABLE',
+  RESERVE = 'RESERVE',
+  RESERVED = 'RESERVED',
+  USING = 'USING',
+  USED = 'USED',
+  RATED = 'RATED',
+  DONE = 'DONE',
+  MAINTENANCE = 'MAINTENANCE'
+}

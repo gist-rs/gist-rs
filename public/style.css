@@ -35,7 +35,7 @@ body {
 
 .button {
   width: fit-content;
-  height: 1.3em;
+  height: 2em;
   color: cornsilk;
   border: #ee3388;
   background: radial-gradient(#ee0088, #cc0066);
@@ -43,7 +43,7 @@ body {
   top: 0px;
 
   padding: 0.6em;
-  padding-bottom: 0.3em;
+  padding-bottom: 0.4em;
   margin: 0.25em;
 
   font-weight: 500;
@@ -55,6 +55,7 @@ body {
 
   position: relative;
   min-width: fit-content;
+  min-height: fit-content;
   line-height: 1em;
   display: inline-block;
   text-decoration: none;
