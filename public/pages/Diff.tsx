@@ -100,7 +100,9 @@ const get_total_price = (computed_reserves) =>
 const Diff = () => {
   const user_session = get_user_session()
   const [pubkey] = useState(user_session.pubkey)
-  const { reservations, today: current_date, reserves } = useSyncReserves()
+  const { reservations, reservations_map, today, reserves } = useSyncReserves()
+  console.log('reservations:', reservations.value)
+  console.log('reservations_map:', reservations_map.value)
 
   const cancelDrag = () => {
     isDrag = false
@@ -138,10 +140,10 @@ const Diff = () => {
   // Calculate total price at local state.
   const total_price = get_total_price(computed_reserves)
 
-  const current_hour = current_date.getHours()
+  const current_hour = today.getHours()
   const is_before_noon = current_hour < 12
 
-  const today_iso = current_date.toISOString()
+  const today_iso = today.toISOString()
   const today_dates = today_iso.split('T')
   const today_ymd = today_dates[0]
   //&& is_after_noon && e.hour >= 12
@@ -153,7 +155,7 @@ const Diff = () => {
           {total_price + ' 🍋'}
         </DragButton>
       </div>
-      <div>NOW: {current_date.toISOString()}</div>
+      <div>NOW: {today.toISOString()}</div>
       <div>
         {computed_reserves.value.map((e, i) => {
           console.log(e.ymd, today_ymd, current_hour)
