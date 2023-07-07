@@ -73,26 +73,37 @@ const Diff = () => {
     reserves.value = [...reserves.value, seat_id]
   }
 
-  let total_price = 0
-
+  // Aggregate reservations from remote state to local state.
   const computed_reserves = computed(() =>
     reservations.value.map((e) => {
       const computed_reserve = { ...e }
       // Reserve?
       computed_reserve.status = reserves.value.includes(e.id) ? SeatStatus.RESERVE : e.status
 
-      // Calculate total price at client.
-      if (computed_reserve.status === SeatStatus.RESERVE) {
-        total_price = parseFloat((total_price + e.offered_price).toFixed(2))
-      }
-
       return computed_reserve
     })
   )
 
+  // Calculate total price at local state.
+  const total_price = computed(() => {
+    let _total_price = 0
+    computed_reserves.value.map((computed_reserve) => {
+      if (computed_reserve.status === SeatStatus.RESERVE) {
+        _total_price = parseFloat((_total_price + computed_reserve.offered_price).toFixed(2))
+      }
+    })
+
+    return _total_price
+  })
+
   return (
     <div class="diff-container" onMouseUp={cancelDrag} onMouseLeave={cancelDrag}>
       <div>user pubkey: {pubkey}</div>
+      <div>
+        <DragButton disabled={total_price.value <= 0} onDragSucceed={handleCheckout}>
+          {total_price + ' 🍋'}
+        </DragButton>
+      </div>
       <div>TODAY: {current_date.value.toISOString()}</div>
       <div>
         {computed_reserves.value.map((e, i) => {
@@ -105,34 +116,12 @@ const Diff = () => {
           )
 
           // Content
-          let content = <></>
-          if (e.hour < 12) {
-            // before noon
-            content = current_hour > 12 ? <button class="button">{e.offered_price + ' 🍋'}</button> : <Seat hour={e.hour} seat_id={e.id} status={e.status} offered_price={e.offered_price} onReserve={handleReserve} />
-          } else {
-            // after noon
-            content = current_hour < 12 ? <>TODO</> : <Seat hour={e.hour} seat_id={e.id} status={e.status} offered_price={e.offered_price} onReserve={handleReserve} />
-          }
-
-          // Action
-          let action = <></>
-          if (i === 11 || i === 23) {
-            const drag_button = (
-              <DragButton disabled={total_price <= 0} onDragSucceed={handleCheckout}>
-                {total_price + ' 🍋'}
-              </DragButton>
-            )
-
-            const before_noon_button = i === 11 && current_hour < 12 ? drag_button : <></>
-            const after_noon_button = i === 23 && current_hour > 12 ? drag_button : <></>
-            action = before_noon_button || after_noon_button
-          }
+          let content = <Seat hour={e.hour} seat_id={e.id} status={e.status} offered_price={e.offered_price} onReserve={handleReserve} />
 
           return (
             <>
               {header}
               {content}
-              {action}
             </>
           )
         })}
