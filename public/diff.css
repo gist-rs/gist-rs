@@ -11,12 +11,13 @@ body {
 }
 
 hr {
-  width: 50%;
   border: none;
   height: 1px;
-  background-color: rgb(255, 255, 255, 0.5);
-  opacity: 0.25;
+  background-color: white;
+  width: 100%;
 }
+
+/* seat */
 
 .clickable {
   cursor: pointer;
@@ -30,22 +31,39 @@ hr {
   text-decoration: none;
   text-align: center;
 
-  margin: 0.25em;
-
   outline: none;
   transition: all 200ms ease-out;
+
+  margin: 4px;
+}
+
+.seat-container {
+  display: flex;
+  flex-shrink: 4;
 }
 
 .seat {
   font-weight: 500;
-  font-size: 1.25em;
+  font-size: 1em;
 
   width: 160px;
-  height: 160px;
+  height: 90px;
 
   display: inline-flex;
   justify-content: center;
   align-items: center;
+
+  border-width: 2px;
+}
+
+.seat-done {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+}
+
+.seat-date {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .seat small {
@@ -60,41 +78,24 @@ hr {
   margin-bottom: 0.1em;
 }
 
-.seat:active {
-  box-shadow: none !important;
-  top: 3px;
-}
-
 .seat-available {
-  box-shadow: none !important;
-  top: 3px;
-
   background: transparent;
 
   border-style: dashed;
-  border-width: 1px;
-  border-color: white;
+  border-width: 2px;
+  border-color: rgb(255, 255, 255, 0.5);
 }
 
 .seat-reserve {
-  box-shadow: none !important;
-  top: 3px;
-
-  background: rgba(255, 255, 255, 0.5);
-
   border-style: solid;
-  border-width: 1px;
-  border-color: black;
+  border-color: yellow;
 }
 
 .seat-reserved {
-  box-shadow: none !important;
-  top: 3px;
-
   border-style: solid;
-  border-width: 1px;
-  border-color: white;
+  border-color: transparent;
 
+  color: red;
   opacity: 0.5;
 }
 
@@ -111,17 +112,24 @@ hr {
 }
 
 .seat-used {
-  box-shadow: none !important;
-  top: 3px;
-
   border-style: solid;
-  border-width: 1px;
-  border-color: white;
+  border-color: rgb(0, 0, 0);
 
   opacity: 0.5;
 }
 
+.price {
+  display: inline-block;
+  border-radius: 1em;
+  background: rgb(255, 255, 255, 0.5);
+  font-size: small;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  color: black;
+}
+
 /* slide button */
+
 .drag-area {
   position: relative;
   background: linear-gradient(-45deg, #ffffff33, #ffffff, #ffffff33, #ffffff);

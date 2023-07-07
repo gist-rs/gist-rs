@@ -4,11 +4,11 @@ import { get_user_session } from '../lib/cf'
 import DragButton from '../components/DragButton'
 import useSyncReserves from '../hooks/useSyncReserves'
 import { SeatStatus } from '../models/SeatType'
-import { computed } from '@preact/signals'
+import { computed, signal } from '@preact/signals'
 import '../diff.css'
 
 // TODO use styled component?
-function get_button_class_by_status(status: SeatStatus): string {
+function get_button_class_by_status(status: SeatStatus) {
   return `clickable seat seat-${status.toLowerCase()}`
 }
 
@@ -18,12 +18,13 @@ type Props = {
   offered_price: number
   onReserve: Function
   hour: number
+  variant: 's' | 'm'
 }
 
 let isDrag = false
 
 const Seat: FunctionComponent<Props> = (props: Props) => {
-  const { seat_id, status, offered_price, onReserve, hour } = props
+  const { seat_id, status, offered_price, onReserve, hour, variant } = props
   const disabled = status !== SeatStatus.AVAILABLE && status !== SeatStatus.RESERVE
 
   const window_handleSeatMouseUp = (e) => handleSeatMouseUp(e, seat_id)
@@ -49,21 +50,36 @@ const Seat: FunctionComponent<Props> = (props: Props) => {
     onReserve(seat_id)
   }
 
-  return (
+  const handleMouseOver = (_e, _seat_id) => {
+    // TODO
+  }
+
+  const handleMouseLeave = (_e, _seat_id) => {
+    // TODO
+  }
+
+  return variant === 's' ? (
+    <div disabled={disabled} class={get_button_class_by_status(status) + ' seat-done'}>
+      {hour.toString().padStart(2, '0')}
+    </div>
+  ) : (
     <div
       disabled={disabled}
       class={get_button_class_by_status(status)}
       onMouseDown={(e) => {
-        e.preventDefault()
         handleSeatMouseDown(e, seat_id)
       }}
       onMouseUp={(e) => handleSeatMouseUp(e, seat_id)}
       onMouseEnter={(e) => handleSeatMouseEnter(e, seat_id)}
+      onMouseOver={(e) => handleMouseOver(e, seat_id)}
+      onMouseLeave={(e) => handleMouseLeave(e, seat_id)}
     >
       <div>
-        {hour.toString().padStart(2, '0') + ':00 ➜ ' + hour.toString().padStart(2, '0') + ':59'}
+        <div>
+          {hour.toString().padStart(2, '0')}:00 <span style={{ opacity: 0.5 }}>→</span> {hour.toString().padStart(2, '0')}:59
+        </div>
         <hr />
-        <small>{offered_price} 🍋</small>
+        <div class="price">{offered_price} 🍋</div>
       </div>
     </div>
   )
@@ -84,7 +100,7 @@ const get_total_price = (computed_reserves) =>
 const Diff = () => {
   const user_session = get_user_session()
   const [pubkey] = useState(user_session.pubkey)
-  const { reservations, current_date, current_hour, reserves } = useSyncReserves()
+  const { reservations, today: current_date, reserves } = useSyncReserves()
 
   const cancelDrag = () => {
     isDrag = false
@@ -122,6 +138,13 @@ const Diff = () => {
   // Calculate total price at local state.
   const total_price = get_total_price(computed_reserves)
 
+  const current_hour = current_date.getHours()
+  const is_before_noon = current_hour < 12
+
+  const today_iso = current_date.toISOString()
+  const today_dates = today_iso.split('T')
+  const today_ymd = today_dates[0]
+  //&& is_after_noon && e.hour >= 12
   return (
     <div class="diff-container" onMouseUp={cancelDrag} onMouseLeave={cancelDrag}>
       <div>user pubkey: {pubkey}</div>
@@ -130,14 +153,34 @@ const Diff = () => {
           {total_price + ' 🍋'}
         </DragButton>
       </div>
-      <div>TODAY: {current_date.value.toISOString()}</div>
+      <div>NOW: {current_date.toISOString()}</div>
       <div>
         {computed_reserves.value.map((e, i) => {
+          console.log(e.ymd, today_ymd, current_hour)
           return (
             <>
-              {i === 0 ? <h4>00:00🌛 ➡︎ 12:00 🌞</h4> : <></>}
-              {i === 12 ? <h4>12:00 🌞 ➡︎ 24:00 🌛</h4> : <></>}
-              <Seat hour={e.hour} seat_id={e.id} status={e.status} offered_price={e.offered_price} onReserve={handleReserve} />
+              {e.hour % 12 === 0 && (
+                <>
+                  {e.hour % 24 === 0 && (
+                    <>
+                      <br />
+                      <br />
+                      <hr />
+                      <h2 class="seat-date">{e.date.toISOString().split('T')[0]}</h2>
+                    </>
+                  )}
+                  {e.hour === 0 ? (
+                    <h4>
+                      {'00'} 🌛 <span style={{ opacity: 0.5 }}>→</span> {e.hour + 12} 🌞
+                    </h4>
+                  ) : (
+                    <h4>
+                      {e.hour} 🌞 <span style={{ opacity: 0.5 }}>→</span> {e.hour + 12} 🌛
+                    </h4>
+                  )}
+                </>
+              )}
+              <Seat variant={e.ymd > today_ymd || (current_hour >= 12 && e.hour >= 12) ? 'm' : 's'} hour={e.hour} seat_id={e.id} status={e.status} offered_price={e.offered_price} onReserve={handleReserve} />
             </>
           )
         })}
