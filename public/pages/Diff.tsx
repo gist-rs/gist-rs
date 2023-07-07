@@ -5,7 +5,9 @@ import DragButton from '../components/DragButton'
 import useSyncReserves from '../hooks/useSyncReserves'
 import { SeatStatus } from '../models/SeatType'
 import { computed } from '@preact/signals'
+import '../diff.css'
 
+// TODO use styled component?
 function get_button_class_by_status(status: SeatStatus): string {
   return `clickable seat seat-${status.toLowerCase()}`
 }
@@ -22,29 +24,62 @@ let isDrag = false
 
 const Seat: FunctionComponent<Props> = (props: Props) => {
   const { seat_id, status, offered_price, onReserve, hour } = props
+  const disabled = status !== SeatStatus.AVAILABLE && status !== SeatStatus.RESERVE
 
-  const handleSeatMouseDown = (seat_id) => {
+  const window_handleSeatMouseUp = (e) => handleSeatMouseUp(e, seat_id)
+
+  const handleSeatMouseDown = (_e, seat_id) => {
+    if (disabled) return
+
     isDrag = true
+    window.document.addEventListener('mouseup', window_handleSeatMouseUp)
+
     onReserve(seat_id)
   }
 
-  const handleSeatMouseUp = (_e) => {
+  const handleSeatMouseUp = (_e, _seat_id) => {
     isDrag = false
+    window.document.removeEventListener('mouseup', window_handleSeatMouseUp)
   }
 
-  const handleSeatMouseEnter = (seat_id) => {
-    isDrag && onReserve(seat_id)
+  const handleSeatMouseEnter = (_e, seat_id) => {
+    if (disabled) return
+    if (!isDrag) return
+
+    onReserve(seat_id)
   }
 
   return (
-    <button disabled={status === SeatStatus.RESERVED} class={get_button_class_by_status(status)} onMouseDown={() => handleSeatMouseDown(seat_id)} onMouseUp={() => handleSeatMouseUp(seat_id)} onMouseEnter={() => handleSeatMouseEnter(seat_id)}>
-      {hour.toString().padStart(2, '0') + ':00 ➜ ' + hour.toString().padStart(2, '0') + ':59'}
-      <hr />
-
-      <small>{offered_price} 🍋</small>
-    </button>
+    <div
+      disabled={disabled}
+      class={get_button_class_by_status(status)}
+      onMouseDown={(e) => {
+        e.preventDefault()
+        handleSeatMouseDown(e, seat_id)
+      }}
+      onMouseUp={(e) => handleSeatMouseUp(e, seat_id)}
+      onMouseEnter={(e) => handleSeatMouseEnter(e, seat_id)}
+    >
+      <div>
+        {hour.toString().padStart(2, '0') + ':00 ➜ ' + hour.toString().padStart(2, '0') + ':59'}
+        <hr />
+        <small>{offered_price} 🍋</small>
+      </div>
+    </div>
   )
 }
+
+const get_total_price = (computed_reserves) =>
+  computed(() => {
+    let _total_price = 0
+    computed_reserves.value.map((computed_reserve) => {
+      if (computed_reserve.status === SeatStatus.RESERVE) {
+        _total_price = parseFloat((_total_price + computed_reserve.offered_price).toFixed(2))
+      }
+    })
+
+    return _total_price
+  })
 
 const Diff = () => {
   const user_session = get_user_session()
@@ -85,16 +120,7 @@ const Diff = () => {
   )
 
   // Calculate total price at local state.
-  const total_price = computed(() => {
-    let _total_price = 0
-    computed_reserves.value.map((computed_reserve) => {
-      if (computed_reserve.status === SeatStatus.RESERVE) {
-        _total_price = parseFloat((_total_price + computed_reserve.offered_price).toFixed(2))
-      }
-    })
-
-    return _total_price
-  })
+  const total_price = get_total_price(computed_reserves)
 
   return (
     <div class="diff-container" onMouseUp={cancelDrag} onMouseLeave={cancelDrag}>
@@ -107,21 +133,11 @@ const Diff = () => {
       <div>TODAY: {current_date.value.toISOString()}</div>
       <div>
         {computed_reserves.value.map((e, i) => {
-          // Header
-          const header = (
+          return (
             <>
               {i === 0 ? <h4>00:00🌛 ➡︎ 12:00 🌞</h4> : <></>}
               {i === 12 ? <h4>12:00 🌞 ➡︎ 24:00 🌛</h4> : <></>}
-            </>
-          )
-
-          // Content
-          let content = <Seat hour={e.hour} seat_id={e.id} status={e.status} offered_price={e.offered_price} onReserve={handleReserve} />
-
-          return (
-            <>
-              {header}
-              {content}
+              <Seat hour={e.hour} seat_id={e.id} status={e.status} offered_price={e.offered_price} onReserve={handleReserve} />
             </>
           )
         })}
