@@ -59,7 +59,7 @@ const Seat: FunctionComponent<Props> = (props: Props) => {
   }
 
   return variant === 's' ? (
-    <div disabled={disabled} class={get_button_class_by_status(status) + ' seat-done'}>
+    <div disabled={disabled} class={get_button_class_by_status(status)}>
       {hour.toString().padStart(2, '0')}
     </div>
   ) : (
@@ -180,7 +180,7 @@ const Diff = () => {
                   )}
                 </>
               )}
-              <Seat variant={e.ymd > today_ymd || (current_hour >= 12 && e.hour >= 12) ? 'm' : 's'} hour={e.hour} seat_id={e.id} status={e.status} offered_price={e.offered_price} onReserve={handleReserve} />
+              <Seat variant={'m'} hour={e.hour} seat_id={e.id} status={e.status} offered_price={e.offered_price} onReserve={handleReserve} />
             </>
           )
         })}

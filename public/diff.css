@@ -56,12 +56,6 @@ hr {
   border-width: 2px;
 }
 
-.seat-done {
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-}
-
 .seat-date {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
@@ -93,7 +87,7 @@ hr {
 
 .seat-reserved {
   border-style: solid;
-  border-color: transparent;
+  border-color: rgb(255, 0, 0, 0.25);
 
   color: red;
   opacity: 0.5;
@@ -113,7 +107,7 @@ hr {
 
 .seat-used {
   border-style: solid;
-  border-color: rgb(0, 0, 0);
+  border-color: rgb(255, 255, 255, 0.25);
 
   opacity: 0.5;
 }
