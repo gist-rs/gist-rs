@@ -50,14 +50,12 @@ const SeatReservation: FunctionComponent<Props> = ({ ymd }) => {
 
   // Calculate total price at local state.
   const total_price = get_total_price(computed_reserves)
-  console.log('total_price:', total_price)
 
   useEffect(() => {
     appContext.reserves.value = reserves.value
   }, [reserves])
 
   useEffect(() => {
-    console.log('total_price:', total_price.value)
     appContext.total_price.value = total_price.value
   }, [total_price])
 

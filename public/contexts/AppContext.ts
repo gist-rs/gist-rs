@@ -6,5 +6,9 @@ type AppContextType = {
   total_price: Signal<number>
 }
 
-const AppContext = createContext({ reserves: signal([]), total_price: signal(0) } as AppContextType);
+const AppContext = createContext({
+  reserves: signal([]),
+  total_price: signal(0),
+} as AppContextType);
+
 export default AppContext
