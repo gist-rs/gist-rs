@@ -20,6 +20,9 @@ const Auth = () => {
       <pre>
         <code>{data}</code>
       </pre>
+      <pre>
+        <code>{import.meta.env.GOOGLE_CLIENT_ID}</code>
+      </pre>
       <script src="https://accounts.google.com/gsi/client" async defer></script>
       <div style={{ width: 'fit-content' }}>
         <div
