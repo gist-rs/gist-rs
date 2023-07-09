@@ -20,6 +20,17 @@ const Auth = () => {
       <pre>
         <code>{data}</code>
       </pre>
+      <script src="https://accounts.google.com/gsi/client" async defer></script>
+      <div style={{ width: 'fit-content' }}>
+        <div
+          id="g_id_onload"
+          data-ux_mode="redirect"
+          data-client_id={import.meta.env.WMR_GOOGLE_CLIENT_ID}
+          data-callback={window.location.hostname === 'localhost' ? import.meta.env.WMR_GOOGLE_REDIRECT_DEV_URL : import.meta.env.WMR_GOOGLE_REDIRECT_PROD_URL}
+          data-auto_prompt="false"
+        ></div>
+        <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left"></div>
+      </div>
       <a href={`/u/${pubkey}`}>accept term and continue</a>
     </div>
   )
