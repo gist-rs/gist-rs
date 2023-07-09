@@ -12,7 +12,7 @@ const Auth = () => {
   return (
     <div>
       <pre>
-        <code>v1</code>
+        <code>2</code>
       </pre>
       <pre>
         <code>{pubkey}</code>
@@ -28,6 +28,12 @@ const Auth = () => {
       </pre>
       <pre>
         <code>process.env.GOOGLE_CLIENT_ID:{process.env.GOOGLE_CLIENT_ID}</code>
+      </pre>
+      <pre>
+        <code>{JSON.stringify(import.meta.env, null, 2)}</code>
+      </pre>
+      <pre>
+        <code>{JSON.stringify(process.env, null, 2)}</code>
       </pre>
       <script src="https://accounts.google.com/gsi/client" async defer></script>
       <div style={{ width: 'fit-content' }}>
