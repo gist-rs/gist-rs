@@ -1,5 +1,4 @@
 import { parse } from "cookie";
-import { getUser } from "../lib/cf-auth/providers/google/users";
 
 /*
  * Helpers for converting to and from URL safe Base64 strings. Needed for JWT encoding.
@@ -46,65 +45,17 @@ function parseJWT(token) {
   }
 }
 
-// /*
-//  * Helper to get from an ascii string to a literal byte array.
-//  * Necessary to get ascii string prepped for base 64 encoding
-//  */
-// function asciiToUint8Array(str) {
-//   let chars = []
-//   for (let i = 0; i < str.length; ++i) {
-//     chars.push(str.charCodeAt(i))
-//   }
-//   return new Uint8Array(chars)
-// }
+export const getTokenInfo = async (idToken: string): Promise<any> => {
+  const result = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${idToken}`, {
+    headers: {
+      "content-type": "application/json",
+    },
+    method: "GET"
+  });
 
-// export const getAccountInfo = async (apiKey: string, idToken: string) => {
-//   const payload = { idToken }
-//   const result = await fetch(`https://www.googleapis.com/identitytoolkit/v3/relyingparty/getAccountInfo?key=${apiKey}`, {
-//     headers: {
-//       "content-type": "application/json",
-//     },
-//     body: JSON.stringify(payload),
-//     method: "POST"
-//   });
-
-//   const json = await result.json()
-//   return json
-// }
-
-// /**
-//  * Validates the provided token using the Access public key set
-//  *
-//  * @param token - the token to be validated
-//  * @returns {object} Returns the payload if valid, or throws an error if not
-//  */
-// async function verifyToken(api_key, token) {
-//   const jwt = parseJWT(token)
-//   // const key = await fetchAccessPublicKey(jwt.header.kid)
-
-//   // const verified = await crypto.subtle.verify(
-//   //   'RSASSA-PKCS1-v1_5',
-//   //   key,
-//   //   base64url.parse(jwt.signature),
-//   //   asciiToUint8Array(jwt.to_be_validated),
-//   // )
-
-//   const verified = await getAccountInfo(api_key, token)
-//   console.log('verified:', verified)
-
-//   if (!verified) {
-//     throw new Error('failed to verify token')
-//   }
-
-//   const claims = jwt.payload
-//   let now = Math.floor(Date.now() / 1000)
-//   // Validate expiration
-//   if (claims.exp < now) {
-//     throw new Error('expired token')
-//   }
-
-//   return claims
-// }
+  const json = await result.json()
+  return json
+}
 
 // ref: https://developers.google.com/identity/gsi/web/guides/verify-google-id-token
 export const onRequestPost: PagesFunction<unknown, "provider"> = async (context) => {
@@ -127,26 +78,27 @@ export const onRequestPost: PagesFunction<unknown, "provider"> = async (context)
 
   const idToken = formData.get(CREDENTIAL)
   if (!idToken) return new Response('No idToken in post body.', { status: 400 })
-  // return new Response(`${idToken}`)
-  console.log('---------------')
-  console.log(idToken)
-  console.log('---------------')
 
-  // Didn't work UNAUTHENTICATED, because this is not access_token but idToken.
-  // const providerUser = await getUser(idToken);
-  // if (!providerUser) return new Response('Invalid accessToken.', { status: 400 })
-
-  // Didn't work INVALID_ID_TOKEN
-  // const foo = await verifyToken(context.env.IDP_API_KEY, idToken)
-
-
+  // Validate idToken.
   const jwt = parseJWT(idToken)
   const claims = jwt.payload
+  console.log(JSON.stringify(claims, null, 2))
   let now = Math.floor(Date.now() / 1000)
-  // Validate expiration
+
+  // 1. Validate expiration.
   if (claims.exp < now) {
     throw new Error('expired token')
   }
 
-  return new Response(`Hello ${JSON.stringify(claims)}`)
+  // 2. Validate idToken.
+  const token_info = await getTokenInfo(idToken);
+  if (!token_info) return new Response('Invalid idToken.', { status: 400 })
+
+  // 3. Expected same aud
+  if (token_info.aud !== claims.aud) return new Response('Invalid aud.', { status: 400 })
+
+  // 4. Expected iss to be accounts.google.com
+  if (token_info.iss !== "https://accounts.google.com") return new Response('Invalid aud.', { status: 400 })
+
+  return new Response(JSON.stringify(token_info, null, 2))
 }
