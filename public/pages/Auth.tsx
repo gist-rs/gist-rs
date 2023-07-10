@@ -9,10 +9,6 @@ const Auth = () => {
   const [session] = useState(user_session.phantom.session)
   const [data] = useState(user_session.phantom.data)
 
-  const handleCredentialResponse = (response) => {
-    console.log('response:', response)
-  }
-
   return (
     <div>
       <pre>
@@ -34,7 +30,6 @@ const Auth = () => {
           data-ux_mode="redirect"
           data-client_id={import.meta.env.GOOGLE_CLIENT_ID || process.env.WMR_GOOGLE_CLIENT_ID}
           data-login_uri={import.meta.env.GOOGLE_REDIRECT_URL || process.env.WMR_GOOGLE_REDIRECT_URL}
-          data-callback={handleCredentialResponse}
           data-auto_prompt="false"
         ></div>
         <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left"></div>

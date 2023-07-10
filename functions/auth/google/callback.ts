@@ -125,6 +125,13 @@ export const onRequest = async (context) => {
   }
 }
 
+const get_user_cookie = async (user_info: any, hostname: string, secret: string) => {
+  const jwt = await generateJWT(user_info, secret);
+  const now = new Date();
+  now.setTime(now.getTime() + 24 * 3600 * 1000);
+  return get_serialized_cookie(COOKIES_GOOGLE_KEY_NAME, jwt, { domain: get_cookies_domain_from_hostname(hostname) });
+}
+
 // ref: https://developers.google.com/identity/gsi/web/guides/verify-google-id-token
 export const onRequestPost: PagesFunction<unknown, "provider"> = async (context) => {
   const COOKIE_NAME = 'g_csrf_token'
@@ -147,26 +154,50 @@ export const onRequestPost: PagesFunction<unknown, "provider"> = async (context)
   const idToken = formData.get(CREDENTIAL)
   if (!idToken) return new Response('No idToken in post body.', { status: 400 })
 
-  // Validate idToken.
+  // 1. Validate idToken.
   const jwt = parseJWT(idToken)
   const claims = jwt.payload
-  console.log(JSON.stringify(claims, null, 2))
+
   let now = Math.floor(Date.now() / 1000)
 
-  // 1. Validate expiration.
+  // 1.1 Validate expiration.
   if (claims.exp < now) {
     throw new Error('expired token')
   }
 
-  // 2. Validate idToken.
+  // 1.2 Validate idToken.
   const token_info = await getTokenInfo(idToken);
   if (!token_info) return new Response('Invalid idToken.', { status: 400 })
 
-  // 3. Expected same aud
+  // 1.3 Expected same aud
   if (token_info.aud !== claims.aud) return new Response('Invalid aud.', { status: 400 })
 
-  // 4. Expected iss to be accounts.google.com
+  // 1.4 Expected iss to be accounts.google.com
   if (token_info.iss !== "https://accounts.google.com") return new Response('Invalid aud.', { status: 400 })
 
-  return new Response(JSON.stringify(token_info, null, 2))
+
+  const user_info = {
+    email: token_info.email
+  }
+
+  // 2. Init user
+  // 2.1 Gen and connect email to wallet.
+  // TODO
+
+  // 2.2 Save to KV?
+  // TODO
+
+  // 2.3 Issue cookie
+  let { origin, hostname } = new URL(request.url);
+
+  // TBD: redirect to left off or error  page?
+  const response = Response.redirect(`${origin}`, 301);
+
+  const user_session_cookie = await get_user_cookie(user_info, hostname, (context.env as any).ENCODE_JWT_TOKEN)
+
+  // Clone the response so that it's no longer immutable
+  const newResponse = new Response(response.body, response);
+  newResponse.headers.set('Set-Cookie', user_session_cookie);
+
+  return newResponse
 }
