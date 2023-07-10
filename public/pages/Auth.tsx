@@ -3,9 +3,9 @@ import { useState } from 'preact/hooks'
 import { get_user_session } from '../lib/cf'
 import { merge_process_env_to_import_env } from '../utils/env'
 
-merge_process_env_to_import_env()
-
 const Auth = () => {
+  merge_process_env_to_import_env()
+
   const user_session = get_user_session()
   console.log('user_session:', user_session)
   const [pubkey] = useState(user_session.pubkey)
@@ -15,7 +15,7 @@ const Auth = () => {
   return (
     <div>
       <pre>
-        <code>2</code>
+        <code>3</code>
       </pre>
       <pre>
         <code>{pubkey}</code>
@@ -30,10 +30,10 @@ const Auth = () => {
         <code>import.meta.env.WMR_GOOGLE_CLIENT_ID:{import.meta.env.WMR_GOOGLE_CLIENT_ID}</code>
       </pre>
       <pre>
-        <code>process.env.WMR_GOOGLE_CLIENT_ID:{process.env.WMR_GOOGLE_CLIENT_ID}</code>
+        <code>--import.meta.env.GOOGLE_CLIENT_ID:{import.meta.env.GOOGLE_CLIENT_ID}</code>
       </pre>
       <pre>
-        <code>import.meta.env.GOOGLE_CLIENT_ID:{import.meta.env.GOOGLE_CLIENT_ID}</code>
+        <code>process.env.WMR_GOOGLE_CLIENT_ID:{process.env.WMR_GOOGLE_CLIENT_ID}</code>
       </pre>
       <pre>
         <code>process.env.GOOGLE_CLIENT_ID:{process.env.GOOGLE_CLIENT_ID}</code>
