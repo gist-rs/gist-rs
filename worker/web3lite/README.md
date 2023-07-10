@@ -39,13 +39,13 @@ npx wrangler deploy
 ```json
 {
   "user::profile::md5(user_email)": {
-    "id": "user::profile::md5(user_email)",
+    "id": "...",
     "email": "katopz+user@gmail.com",
     "wallet_address": "user_waLLetAddreSs",
     "last_seen": "2023-06-01T10:00:00.0z"
   },
   "miner::profile::md5(user_email)": {
-    "id": "user::profile::md5(user_email)",
+    "id": "...",
     "email": "katopz+miner@gmail.com",
     "wallet_address": "miner_waLLetAddreSs",
     "last_seen": "2023-06-01T10:00:00.0z"
@@ -59,8 +59,8 @@ npx wrangler deploy
 
 ```json
 {
-  "ticket::user_waLLetAddreSs::2023-06-01::10": {
-    "id": "user::ticket::user_waLLetAddreSs::2023-06-01::10",
+  "ticket::2023-06-01::10::user_waLLetAddreSs": {
+    "id": "...",
     "miner_wallet_address": "miner_WalletAddReSs",
     // ui
     "user_wallet_address": "user_waLLetAddreSs",
@@ -78,14 +78,14 @@ npx wrangler deploy
 ```json
 {
   "wallet::user::user_waLLetAddreSs": {
-    "id": "wallet::user::user_waLLetAddreSs",
+    "id": "...",
     "wallet_address": "user_waLLetAddreSs",
     "email": "katopz+user@gmail.com",
     "most_recent_confirmed_signature": "3kx6hjvC9LNbrQzbNAnkC1QSvxVzXXYHubqukj12EBwye3DYH1hJSSMsMj8Yg6dcysnR6B6MfPYPWTZiCTCRz84E",
     "nonce": 1
   },
   "wallet::miner::miner_WalletAddReSs": {
-    "id": "wallet::miner::miner_WalletAddReSs",
+    "id": "...",
     "wallet_address": "miner_WalletAddReSs",
     "email": "katopz+miner@gmail.com",
     "most_recent_confirmed_signature": "4kx6hjvC9LNbrQzbNAnkC1QSvxVzXXYHubqukj12EBwye3DYH1hJSSMsMj8Yg6dcysnR6B6MfPYPWTZiCTCRz84E",
@@ -109,8 +109,8 @@ npx wrangler deploy
 
 ```json
 {
-  "proof::user_waLLetAddreSs::2023-06::offchain_blocknumber" {
-    "id": "payment::user_waLLetAddreSs",
+  "proof::2023-06::user_waLLetAddreSs::offchain_blocknumber" {
+    "id": "...",
     "from": "user_waLLetAddreSs", // reference
     "to": "miner_WalletAddReSs", // label
     "amount": 1000.001,
@@ -128,8 +128,8 @@ npx wrangler deploy
 
 ```json
 {
-  "tx::user_waLLetAddreSs::2023-06::tx_hash": {
-    "id": "transaction::user_waLLetAddreSs::tx_hash",
+  "tx::2023-06::user_waLLetAddreSs::tx_hash": {
+    "id": "...",
     "user_wallet_address": "user_waLLetAddreSs", // reference
     "miner_wallet_address": "miner_WalletAddReSs", // label
     // raw
@@ -158,7 +158,7 @@ npx wrangler deploy
 ```json
 {
   "2023-06-01::01::miner_WalletAddReSs": {
-    "id": "2023-06-01::01::miner_WalletAddReSs",
+    "id": "...",
     "user_wallet_address": undefined,
     "miner_wallet_address": "miner_WalletAddReSs",
     "hour": 0,
@@ -206,7 +206,7 @@ npx wrangler deploy
 ```json
 {
   "4090RTX::miner_WalletAddReSs": {
-    "id": "4090RTX::miner_WalletAddReSs",
+    "id": "...",
     "class": "4090RTX",
     "spec": {},
     "email": "katopz@gmail.com",

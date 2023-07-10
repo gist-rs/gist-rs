@@ -4,8 +4,6 @@ export function onRequest(context) {
   const redirectUrl = context.env.GOOGLE_REDIRECT_URL;
   const clientId = context.env.GOOGLE_CLIENT_ID;
 
-  console.log("[redirectUrl]", redirectUrl);
-
   const params = queryString.stringify({
     client_id: clientId,
     redirect_uri: redirectUrl,

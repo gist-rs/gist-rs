@@ -43,7 +43,7 @@ async function getTokensFromCode(code: string, { redirectUrl, clientId, clientSe
   return result;
 }
 
-export async function getUser(token: string): Promise<User> {
+export async function getUserInfo(token: string): Promise<User> {
   try {
     const getUserResponse = await fetch(
       'https://www.googleapis.com/oauth2/v2/userinfo',
@@ -75,7 +75,7 @@ export default async function callback({ options, request }: { options: Options,
   }
   const tokens = await getTokensFromCode(query.code, options);
   const accessToken = tokens.access_token;
-  const providerUser = await getUser(accessToken);
+  const providerUser = await getUserInfo(accessToken);
   return {
     user: providerUser,
     tokens

@@ -32,7 +32,7 @@ const Auth = () => {
           data-login_uri={import.meta.env.GOOGLE_REDIRECT_URL || process.env.WMR_GOOGLE_REDIRECT_URL}
           data-auto_prompt="false"
         ></div>
-        <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left"></div>
+        <div class="g_id_signin" data-type="standard" data-size="large" data-theme="filled_black" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left"></div>
       </div>
       <a href={`/u/${pubkey}`}>accept term and continue</a>
     </div>
