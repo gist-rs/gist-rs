@@ -30,7 +30,7 @@ export const onRequest = async (context) => {
     const options = {
       clientId: context.env.GOOGLE_CLIENT_ID,
       clientSecret: context.env.GOOGLE_CLIENT_SECRET,
-      redirectUrl: context.env.GOOGLE_REDIRECT_DEV_URL || context.env.GOOGLE_REDIRECT_PROD_URL,
+      redirectUrl: context.env.GOOGLE_REDIRECT_URL,
     };
 
     const { user: providerUser } = await google.users({
