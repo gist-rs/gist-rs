@@ -33,7 +33,7 @@ const Auth = () => {
           id="g_id_onload"
           data-ux_mode="redirect"
           data-client_id={import.meta.env.GOOGLE_CLIENT_ID || process.env.WMR_GOOGLE_CLIENT_ID}
-          data-login_uri={import.meta.env.GOOGLE_REDIRECT_URL || process.env.GOOGLE_REDIRECT_URL}
+          data-login_uri={import.meta.env.GOOGLE_REDIRECT_URL || process.env.WMR_GOOGLE_REDIRECT_URL}
           data-callback={handleCredentialResponse}
           data-auto_prompt="false"
         ></div>
