@@ -1,6 +1,7 @@
 import jwt from '@tsndr/cloudflare-worker-jwt';
-import { COOKIES_GOOGLE_KEY_NAME, get_cookies_domain_from_hostname, get_serialized_cookie } from '../auth/cookies';
-import { UserInfo } from '../auth/google/callback';
+import { COOKIES_GOOGLE_KEY_NAME, get_cookie_from_request, get_cookies_domain_from_hostname, get_serialized_cookie } from '../auth/cookies';
+import { UserInfo } from "./user";
+import { parseJWT } from '../utils/jwt';
 
 export function generateJWT(user: UserInfo, secret: string) {
   return jwt.sign({ exp: Math.floor(Date.now() / 1000) + (24 * (60 * 60)), ...user }, secret, { algorithm: 'HS256' });
@@ -19,4 +20,11 @@ export async function new_response_with_user_cookie(response: Response, user_inf
   new_response.headers.set('Set-Cookie', user_session_cookie);
 
   return new_response
+}
+export async function get_user_info_from_request_cookie(request: Request) {
+  const idToken = get_cookie_from_request(request, COOKIES_GOOGLE_KEY_NAME)
+  const jwt = parseJWT(idToken)
+  const { payload } = jwt
+
+  return payload as UserInfo
 }

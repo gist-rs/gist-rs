@@ -2,7 +2,7 @@
 import * as bs58 from "bs58";
 import * as nacl from "tweetnacl";
 import html from '../../dist/auth.html'
-import { UserSessionType } from '../../model/session'
+import { Web3UserInfo } from '../../model/session'
 import { COOKIES_PHANTOM_KEY_NAME, get_cookies_domain_from_hostname, get_serialized_cookie } from "./cookies";
 
 // https://docs.phantom.app/solana/integrating-phantom/deeplinks-ios-and-android/handling-sessions#session-structure
@@ -50,7 +50,7 @@ export const handle_phantom_deeplink = async (context) => {
   const body = `<script>window.__SESSION__=${JSON.stringify({
     pubkey,
     phantom: { session, data }
-  } as UserSessionType)}</script>`
+  } as Web3UserInfo)}</script>`
   const response = new Response(body + html, {
     headers: { "content-type": "text/html" },
   });

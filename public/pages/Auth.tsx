@@ -1,28 +1,13 @@
 import { render } from 'preact'
 import { useState } from 'preact/hooks'
-import { get_user_session } from '../lib/cf'
+import { get_user_info_from_session } from '../lib/cf'
 
 const Auth = () => {
-  const user_session = get_user_session()
+  const user_session = get_user_info_from_session()
   console.log('user_session:', user_session)
-  const [pubkey] = useState(user_session.pubkey)
-  const [session] = useState(user_session.phantom.session)
-  const [data] = useState(user_session.phantom.data)
 
   return (
     <div>
-      <pre>
-        <code>3</code>
-      </pre>
-      <pre>
-        <code>{pubkey}</code>
-      </pre>
-      <pre>
-        <code>{session}</code>
-      </pre>
-      <pre>
-        <code>{data}</code>
-      </pre>
       <script src="https://accounts.google.com/gsi/client" async defer></script>
       <div style={{ width: 'fit-content' }}>
         <div
@@ -34,7 +19,7 @@ const Auth = () => {
         ></div>
         <div class="g_id_signin" data-type="standard" data-size="large" data-theme="filled_black" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left"></div>
       </div>
-      <a href={`/u/${pubkey}`}>accept term and continue</a>
+      {/* <a href={`/u/${pubkey}`}>accept term and continue</a> */}
     </div>
   )
 }

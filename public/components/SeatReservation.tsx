@@ -1,5 +1,5 @@
 import { FunctionComponent } from 'preact'
-import { computed, signal } from '@preact/signals'
+import { computed } from '@preact/signals'
 import { SeatStatus } from '../models/SeatType'
 import Seat from './Seat'
 import useSyncReserves from '../hooks/useSyncReserves'

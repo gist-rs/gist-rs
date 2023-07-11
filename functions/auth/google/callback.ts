@@ -3,6 +3,7 @@ import { parse } from "cookie";
 import { google } from '../../lib/cf-auth';
 import { parseJWT } from '../../utils/jwt';
 import { new_response_with_user_cookie } from "../jwt";
+import { UserInfo } from "../user";
 
 export const getTokenInfo = async (idToken: string): Promise<any> => {
   const result = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${idToken}`, {
@@ -14,12 +15,6 @@ export const getTokenInfo = async (idToken: string): Promise<any> => {
 
   const json = await result.json()
   return json
-}
-
-export type UserInfo = {
-  name: string
-  image: string
-  email: string
 }
 
 // TODO: use this with discord and else 
@@ -89,7 +84,7 @@ class OAuthResponder {
     return {
       email: providerUser.email,
       name: providerUser.name,
-      image: providerUser.picture,
+      picture: providerUser.picture,
     } as UserInfo
   }
 }
@@ -137,6 +132,6 @@ async function extract_user_info(request: Request) {
   return {
     email: token_info.email,
     name: token_info.name,
-    image: token_info.picture,
+    picture: token_info.picture,
   } as UserInfo
 }

@@ -1,4 +1,5 @@
-import * as cookie from "cookie";
+// import * as cookie from "cookie";
+import { serialize, parse } from "cookie";
 
 type CookieOptions = {
   domain: string,
@@ -19,7 +20,7 @@ export const COOKIES_DOMAIN = '.gist.rs'
 export const get_cookies_domain_from_hostname = (hostname: string) => DOMAIN_WHITELIST.includes(hostname) ? '' : COOKIES_DOMAIN;
 
 export const get_serialized_cookie = (key: string, value: string, options: CookieOptions) => {
-  return cookie.serialize(key, value, {
+  return serialize(key, value, {
     httpOnly: true,
     secure: true,
     path: '/',
@@ -27,4 +28,9 @@ export const get_serialized_cookie = (key: string, value: string, options: Cooki
     sameSite: options.domain !== '' ? 'lax' : 'none',
     ...options,
   })
+}
+
+export const get_cookie_from_request = (request: Request, cookie_name: string) => {
+  const cookie = parse(request.headers.get("Cookie") || "");
+  return cookie[cookie_name]
 }

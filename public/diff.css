@@ -17,6 +17,23 @@ hr {
   width: 100%;
 }
 
+/* nav */
+
+.navbar {
+  background-color: dimgray;
+  width: 100%;
+}
+
+.avatar {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: white;
+  border-radius: 16px;
+}
+
 /* seat */
 
 .clickable {

@@ -1,18 +1,13 @@
-import { FunctionComponent, createContext, render } from 'preact'
-import { useContext, useState } from 'preact/hooks'
-import { get_user_session } from '../lib/cf'
+import { render } from 'preact'
+import { useContext } from 'preact/hooks'
 import DragButton from '../components/DragButton'
-import useSyncReserves from '../hooks/useSyncReserves'
-import { SeatStatus } from '../models/SeatType'
-import { computed, signal } from '@preact/signals'
-import '../diff.css'
 import SeatReservation from '../components/SeatReservation'
 import AppContext from '../contexts/AppContext'
+import NavBar from '../components/NavBar'
+import '../diff.css'
 
 const Diff = () => {
   const appContext = useContext(AppContext)
-  const user_session = get_user_session()
-  const [pubkey] = useState(user_session.pubkey)
 
   // TODO: use /diff/{ymd}
   const today = new Date()
@@ -33,7 +28,7 @@ const Diff = () => {
   return (
     <AppContext.Provider value={appContext}>
       <div class="diff-container">
-        <div>user pubkey: {pubkey}</div>
+        <NavBar />
         <div>
           <DragButton disabled={appContext.total_price.value <= 0} onDragSucceed={handleCheckout}>
             {appContext.total_price.value + ' 🍋'}

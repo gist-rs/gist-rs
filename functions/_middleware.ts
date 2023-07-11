@@ -1,3 +1,5 @@
+import { get_user_info_from_request_cookie } from "./auth/jwt";
+
 interface Env {
   KV: KVNamespace;
 }
@@ -12,14 +14,13 @@ const authentication: PagesFunction<Env> = async (context) => {
   const { pathname } = new URL(request.url)
 
   switch (pathname) {
-    // TODO: read from cookie?
-    // case "/":
-    //   const original_body = await response.text();
-    //   const pubkey = '3mPuPCgmdexxcSYtpKDTPktTnEYHJcsZxCJdfemN1xgt';
-    //   const data = JSON.stringify({ pubkey });
-    //   const body = `<script>window.__STATE__=${data}</script>` + original_body
-    //   const new_response = new Response(body, response);
-    //   return new_response
+    case "/diff":
+      const user_info = await get_user_info_from_request_cookie(request)
+      const original_body = await response.text();
+      const data = JSON.stringify({ user_info });
+      const body = `<script>window.__SESSION__=${data}</script>` + original_body
+      const new_response = new Response(body, response);
+      return new_response
 
     default: return response;
   }
