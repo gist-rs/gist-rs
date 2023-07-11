@@ -2,7 +2,6 @@
 import { parse } from "cookie";
 import { google } from '../../lib/cf-auth';
 import { parseJWT } from '../../utils/jwt';
-import { upsert_member } from "../../lib/diff/member";
 import { new_response_with_user_cookie } from "../jwt";
 
 export const getTokenInfo = async (idToken: string): Promise<any> => {
@@ -41,13 +40,10 @@ export const onRequestPost: PagesFunction<unknown, "provider"> = async (context)
     // User
     const user_info = await extract_user_info(context.request)
 
-    // Member
-    const member_info = await upsert_member(user_info)
-
     // TBD: redirect by member_info state.
     const url = new URL(context.request.url)
     let response = Response.redirect(url.origin, 301);
-    let new_response = await new_response_with_user_cookie(response, member_info.user_info, url.hostname, (context.env as any).ENCODE_JWT_TOKEN)
+    let new_response = await new_response_with_user_cookie(response, user_info, url.hostname, (context.env as any).ENCODE_JWT_TOKEN)
 
     return new_response
   } catch (e) {
@@ -97,7 +93,6 @@ class OAuthResponder {
     } as UserInfo
   }
 }
-
 
 async function extract_user_info(request: Request) {
   const COOKIE_NAME = 'g_csrf_token'
