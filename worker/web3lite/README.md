@@ -34,7 +34,7 @@ npx wrangler deploy
 
 ## User.Profile
 
-`YUZU_USERS`
+`DIFF_USERS`
 
 ```json
 {
@@ -55,7 +55,7 @@ npx wrangler deploy
 
 ## User.Tickets
 
-`YUZU_TICKET`
+`DIFF_TICKET`
 
 ```json
 {
@@ -73,25 +73,25 @@ npx wrangler deploy
 
 ## Wallet
 
-`YUZU_WALLET`
+`DIFF_WALLET`
 
 ```json
 {
-  "wallet::user::user_waLLetAddreSs": {
+  "user::md5(email)": {
     "id": "...",
     "wallet_address": "user_waLLetAddreSs",
     "email": "katopz+user@gmail.com",
     "most_recent_confirmed_signature": "3kx6hjvC9LNbrQzbNAnkC1QSvxVzXXYHubqukj12EBwye3DYH1hJSSMsMj8Yg6dcysnR6B6MfPYPWTZiCTCRz84E",
     "nonce": 1
   },
-  "wallet::miner::miner_WalletAddReSs": {
+  "miner::md5(email)": {
     "id": "...",
     "wallet_address": "miner_WalletAddReSs",
     "email": "katopz+miner@gmail.com",
     "most_recent_confirmed_signature": "4kx6hjvC9LNbrQzbNAnkC1QSvxVzXXYHubqukj12EBwye3DYH1hJSSMsMj8Yg6dcysnR6B6MfPYPWTZiCTCRz84E",
     "nonce": 1
   },
-  "platform::miner::platform_WalletAddReSs": {
+  "platform::md5(email)": {
     "id": "wallet::platform::platform_WalletAddReSs",
     "wallet_address": "platform_WalletAddReSs",
     "email": "katopz+platform@gmail.com",
@@ -103,7 +103,7 @@ npx wrangler deploy
 
 ## Proofs
 
-`YUZU_PROOF`
+`DIFF_PROOF`
 
 > Can release with offchain via email or onchain transfer.
 
@@ -124,7 +124,7 @@ npx wrangler deploy
 
 ## Transactions (TBD)
 
-`YUZU_TRANSACTION`
+`DIFF_TRANSACTION`
 
 ```json
 {
@@ -153,7 +153,7 @@ npx wrangler deploy
 
 ## Reservations
 
-`YUZU_RESERVATION`
+`DIFF_RESERVATION`
 
 ```json
 {
