@@ -1,4 +1,4 @@
-import { get_user_info_from_request_cookie } from "./auth/jwt";
+import { get_cookie_payload_from_request } from "./auth/jwt";
 
 interface Env {
   KV: KVNamespace;
@@ -15,9 +15,9 @@ const authentication: PagesFunction<Env> = async (context) => {
 
   switch (pathname) {
     case "/diff":
-      const user_info = await get_user_info_from_request_cookie(request)
+      const google_cookie_payload = await get_cookie_payload_from_request(request, (context.env as any).COOKIES_GOOGLE_KEY_NAME)
       const original_body = await response.text();
-      const data = JSON.stringify({ user_info });
+      const data = JSON.stringify({ user_info: google_cookie_payload });
       const body = `<script>window.__SESSION__=${data}</script>` + original_body
       const new_response = new Response(body, response);
       return new_response

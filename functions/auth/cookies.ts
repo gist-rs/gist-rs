@@ -10,8 +10,7 @@ type CookieOptions = {
   maxAge?: number
 }
 
-// TODO: moved to env
-export const COOKIES_GOOGLE_KEY_NAME = '__Session-worker.auth.providers-token';
+// TBD: moved to env?
 export const COOKIES_PHANTOM_KEY_NAME = 'phantom::session'
 
 export const DOMAIN_WHITELIST = ['localhost', 'develop.gist-rs.pages.dev', 'gist-rs.pages.dev']

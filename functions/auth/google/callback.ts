@@ -5,7 +5,7 @@ import { parseJWT } from '../../utils/jwt';
 import { new_response_with_user_cookie } from "../jwt";
 import { UserInfo } from "../user";
 
-export const getTokenInfo = async (idToken: string): Promise<any> => {
+export const fetch_id_token_info = async (idToken: string): Promise<any> => {
   const result = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${idToken}`, {
     headers: {
       "content-type": "application/json",
@@ -32,13 +32,13 @@ export const onRequest = async (context) => {
 // ref: https://developers.google.com/identity/gsi/web/guides/verify-google-id-token
 export const onRequestPost: PagesFunction<unknown, "provider"> = async (context) => {
   try {
-    // User
-    const user_info = await extract_user_info(context.request)
+    // Get token info from request.
+    const id_token_info = await get_id_token_info(context.request)
 
-    // TBD: redirect by member_info state.
+    // TBD: redirect by member state.
     const url = new URL(context.request.url)
     let response = Response.redirect(url.origin, 301);
-    let new_response = await new_response_with_user_cookie(response, user_info, url.hostname, (context.env as any).ENCODE_JWT_TOKEN)
+    let new_response = await new_response_with_user_cookie(response, id_token_info, url.hostname, (context.env as any).ENCODE_JWT_TOKEN, (context.env as any).COOKIES_GOOGLE_KEY_NAME)
 
     return new_response
   } catch (e) {
@@ -89,7 +89,7 @@ class OAuthResponder {
   }
 }
 
-async function extract_user_info(request: Request) {
+async function get_id_token_info(request: Request) {
   const COOKIE_NAME = 'g_csrf_token'
   const CREDENTIAL = 'credential'
 
@@ -120,18 +120,14 @@ async function extract_user_info(request: Request) {
   }
 
   // 1.2 Validate idToken.
-  const token_info = await getTokenInfo(idToken);
-  if (!token_info) throw new Error('Invalid idToken.')
+  const id_token_info = await fetch_id_token_info(idToken);
+  if (!id_token_info) throw new Error('Invalid idToken.')
 
   // 1.3 Expected same aud
-  if (token_info.aud !== claims.aud) throw new Error('Invalid aud.')
+  if (id_token_info.aud !== claims.aud) throw new Error('Invalid aud.')
 
   // 1.4 Expected iss to be accounts.google.com
-  if (token_info.iss !== "https://accounts.google.com") throw new Error('Invalid aud.')
+  if (id_token_info.iss !== "https://accounts.google.com") throw new Error('Invalid aud.')
 
-  return {
-    email: token_info.email,
-    name: token_info.name,
-    picture: token_info.picture,
-  } as UserInfo
+  return id_token_info
 }
