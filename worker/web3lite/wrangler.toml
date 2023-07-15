@@ -1,6 +1,0 @@
-name = "solana-cf"
-main = "build/worker/shim.mjs"
-compatibility_date = "2023-04-19"
-
-[build]
-command = "cargo install worker-build && worker-build --release"
